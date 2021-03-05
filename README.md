@@ -1,4 +1,4 @@
-# Rosalind Solutions
+# Rosalind solver
 
 Simple (brute force?) solutions to the Rosalind problems in python.
 
