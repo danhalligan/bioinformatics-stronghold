@@ -143,6 +143,20 @@ def orf(file: str):
     """Open Reading Frames
     """
 
+
+@app.command("perm")
+def perm(n: int):
+    from itertools import permutations
+    perm = list(permutations(range(1, n+1)))
+    print(len(perm))
+    [print(*i) for i in perm]
+
+
+@app.command("prtm")
+def prtm(file: str):
+    print(protein_mass(Parser(file).line()))
+    
+
 @app.command("kmp")
 def kmp(file: str):
     """Shortening the Motif Search
@@ -150,6 +164,14 @@ def kmp(file: str):
     seq = list(SeqIO.parse("data/rosalind_kmp.txt", "fasta"))[0].seq
     print(*kmp_preprocess(seq))
 
+
+@app.command("revp")
+def revp(file: str):
+    seq = str(list(SeqIO.parse(file, "fasta"))[0].seq)
+    res = list(reverse_pallindromes(seq))
+    res.sort()
+    for row in res:
+        print(*row, sep=' ')
 
 def main():
     app()

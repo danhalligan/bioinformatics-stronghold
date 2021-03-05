@@ -101,7 +101,13 @@ def test_find_orfs():
     seq = str(testdata().fastas()[0].seq)
     exp = {'MLLGSFRLIPKETLIQVAGSSPCNLS', 'M', 'MGMTPRLGLESLLE', 'MTPRLGLESLLE'}
     assert set(find_orfs(seq)) == exp
-    
+
+
+def test_reverse_pallindromes():
+    exp = [[4, 6], [5, 4], [6, 6], [7, 4], [17, 4], [18, 4], [20, 6], [21, 4]]
+    out = list(reverse_pallindromes('TCAATGCATGCGGGTCTATATGCAT'))
+    assert sorted(out) == exp
+
 
 def test_count_rnas():
     assert count_rnas('MA') == 12
