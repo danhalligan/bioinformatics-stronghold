@@ -1,6 +1,6 @@
 # Rosalind solver
 
-Solutions to the Rosalind problems in python as a command line app. My solutions may be brute force :expressionless:
+Solutions to the Rosalind problems in python as a command line app. My solutions may be brute force :relaxed:
 
 <http://rosalind.info/problems/>
 
