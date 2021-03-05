@@ -1,12 +1,13 @@
 import inspect
 from Bio import SeqIO
 
+
 class Parser:
     """Parse problem data"""
-    
+
     def __init__(self, file):
         self.file = file
-    
+
     def line(self):
         return open(self.file).readline().rstrip()
 
