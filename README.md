@@ -13,6 +13,8 @@ CLI built using Poetry & Typer based on this blog post:
 
 You can install with pip:
 
-`git clone https://gitlab.fiosgenomics.com/rosalind/dan rosalind-solver`
-`pip3 install rosalind-solver`
+```bash
+git clone https://gitlab.fiosgenomics.com/rosalind/dan rosalind-solver
+pip3 install rosalind-solver
+```
 
