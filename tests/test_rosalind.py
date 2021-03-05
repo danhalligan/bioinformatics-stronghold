@@ -2,12 +2,17 @@ from rosalind import __version__
 from rosalind.rosalind import *
 from rosalind.helpers import *
 
+def testdata(fun=None):
+    if fun is None: fun = inspect.stack()[1].function
+    return Parser("tests/data/" + fun + ".txt")
+
+
 def test_version():
     assert __version__ == '0.1.0'
 
 
 def test_dna():
-    dat = Data("dna", test=True).line()
+    dat = testdata().line()
     assert count_nucleotides(dat) == [20, 12, 17, 21]
 
 
@@ -28,7 +33,7 @@ def test_rabbits():
 
 
 def test_gc():
-    dat = Data("gc", test=True).fastas()
+    dat = testdata().fastas()
     assert max_gc(dat) == {'name': 'Rosalind_0808', 'value': 60.919540}
 
 
@@ -57,14 +62,14 @@ def test_profile_matrix():
            [1, 1, 6, 3, 0, 1, 0, 0],
            [1, 5, 0, 0, 0, 1, 1, 6]]
 
-    dat = Data("cons", test=True).fastas()
+    dat = testdata("test_cons").fastas()
     seqs = [x.seq for x in dat]
     out = profile_matrix(seqs)
     assert all([all(out[i] == exp[i]) for i in range(3)])
 
 
 def test_consensus_sequence():
-    dat = Data("cons", test=True).fastas()
+    dat = testdata("test_cons").fastas()
     seqs = [x.seq for x in dat]
     out = consensus_sequence(profile_matrix(seqs))
     assert out == 'ATGCAACT'
@@ -79,7 +84,7 @@ def test_expected_offspring():
 
 
 def test_find_shared_motif():
-    seqs = [x.seq for x in Data("lcsm", test=True).fastas()]
+    seqs = [x.seq for x in testdata().fastas()]
     assert find_shared_motif(seqs) == 'AC'
 
 
@@ -93,7 +98,7 @@ def test_find_protein_motif():
 
 
 def test_find_orfs():
-    seq = str(Data("orfs", test=True).fastas()[0].seq)
+    seq = str(testdata().fastas()[0].seq)
     exp = {'MLLGSFRLIPKETLIQVAGSSPCNLS', 'M', 'MGMTPRLGLESLLE', 'MTPRLGLESLLE'}
     assert set(find_orfs(seq)) == exp
     
