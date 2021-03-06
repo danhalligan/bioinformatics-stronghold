@@ -134,7 +134,7 @@ def profile_matrix(seqs):
     def count_bases(v):
         return [sum(v == b) for b in "ACGT"]
 
-    x = np.array(seqs)
+    x = np.array([list(x) for x in seqs])
     return np.array([count_bases(v) for v in x.T]).T
 
 
@@ -187,10 +187,9 @@ def mendel2(k, n):
 def get_uniprot(id):
     import requests as r
     from io import StringIO
-    from Bio import SeqIO
 
     response = r.post(f"https://www.uniprot.org/uniprot/{id}.fasta")
-    return list(SeqIO.parse(StringIO(response.text), "fasta"))[0]
+    return list(read_fasta(StringIO(response.text), "fasta"))[0]
 
 
 def find_protein_motif(seq, pattern="N[^P][ST][^P]"):
@@ -234,7 +233,7 @@ def find_orfs(seq):
         for i in range(3):
             l = len(s)
             subseq = s[i : l - (l - i) % 3]
-            for m in re.finditer("(?=(M[^\*]*)\*)", translate(subseq)):
+            for m in re.finditer("(?=(M[^\\*]*)\\*)", translate(subseq)):
                 yield m.group(1)
 
 
