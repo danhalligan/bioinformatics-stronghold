@@ -1,6 +1,6 @@
 import re
 import numpy as np
-from rosalind.helpers import *
+from rosalind.helpers import read_fasta
 
 
 def count_nucleotides(seq):
@@ -232,8 +232,7 @@ def find_orfs(seq):
     for s in [seq, revcomp(seq)]:
         s = dna2rna(s)
         for i in range(3):
-            l = len(s)
-            subseq = s[i : l - (l - i) % 3]
+            subseq = s[i : len(s) - (len(s) - i) % 3]
             for m in re.finditer("(?=(M[^\\*]*)\\*)", translate(subseq)):
                 yield m.group(1)
 

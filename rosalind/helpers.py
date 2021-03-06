@@ -1,5 +1,4 @@
 import re
-import inspect
 
 
 class Parser:
