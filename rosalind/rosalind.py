@@ -1,5 +1,6 @@
 import re
 import numpy as np
+from rosalind.helpers import *
 
 
 def count_nucleotides(seq):
@@ -189,7 +190,7 @@ def get_uniprot(id):
     from io import StringIO
 
     response = r.post(f"https://www.uniprot.org/uniprot/{id}.fasta")
-    return list(read_fasta(StringIO(response.text), "fasta"))[0]
+    return list(read_fasta(StringIO(response.text)))[0]
 
 
 def find_protein_motif(seq, pattern="N[^P][ST][^P]"):

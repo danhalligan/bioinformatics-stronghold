@@ -1,7 +1,7 @@
 import typer
 
-from .rosalind import *
-from .helpers import *
+from rosalind.rosalind import *
+from rosalind.helpers import *
 
 app = typer.Typer()
 
@@ -25,9 +25,8 @@ def revc(file: str):
 
 
 @app.command("fib")
-def fib(file: str):
+def fib(n: int, k: int):
     """Rabbits and Recurrence Relations"""
-    n, k = map(int, Parser(file).line())
     print(rabbits(n, k))
 
 
@@ -47,9 +46,8 @@ def hamm(file: str):
 
 
 @app.command("iprb")
-def iprb(file: str):
+def iprb(k: int, m: int, n: int):
     """Mendel's First Law"""
-    k, m, n = map(int, Parser(file).line().split())
     print(mendel1(k, m, n))
 
 
@@ -79,9 +77,8 @@ def cons(file: str):
 
 
 @app.command("fibd")
-def fibd(file: str):
+def fibd(n: int, m: int):
     """Mortal Fibonacci Rabbits"""
-    n, m = map(int, Parser(file).line().split())
     print(mortal_rabbits(n, m))
 
 
@@ -130,6 +127,7 @@ def orf(file: str):
 
 @app.command("perm")
 def perm(n: int):
+    """Enumerating Gene Orders"""
     from itertools import permutations
 
     perm = list(permutations(range(1, n + 1)))
@@ -140,19 +138,21 @@ def perm(n: int):
 
 @app.command("prtm")
 def prtm(file: str):
+    """Calculating Protein Mass"""
     print(protein_mass(Parser(file).line()))
 
 
 @app.command("kmp")
 def kmp(file: str):
     """Shortening the Motif Search"""
-    seq = list(SeqIO.parse("data/rosalind_kmp.txt", "fasta"))[0].seq
+    seq = Parser(file).fastas()[0].seq
     print(*kmp_preprocess(seq))
 
 
 @app.command("revp")
 def revp(file: str):
-    seq = str(list(SeqIO.parse(file, "fasta"))[0].seq)
+    """Locating Restriction Sites"""
+    seq = Parser(file).fastas()[0].seq
     res = list(reverse_pallindromes(seq))
     res.sort()
     for row in res:

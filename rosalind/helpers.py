@@ -1,5 +1,5 @@
-import inspect
 import re
+import inspect
 
 
 class Parser:
