@@ -16,21 +16,22 @@ Some build details that I'm playing with while putting this together:
 - [flake8] for code linting
 - Pre-commit hook for formatting with black using [pre-commit] based on
   [black docs]
+- Coverage and coverage reports with [pytest-cov]
+- Snapshots of test output with [snapshottest]
 
 ## Install
 
 You can install with pip:
 
 ```bash
-git clone https://gitlab.fiosgenomics.com/rosalind/dan rosalind-solver
-pip3 install rosalind-solver
+git clone https://gitlab.fiosgenomics.com/dan/rosalind rosalind
+pip3 install rosalind
 ```
 
 ## Examples
 
 ``` bash
-rosalind fibd 80 18
-rosalind perm 3
+rosalind dna rosalind_dna.txt
 ```
 
 [Poetry]: https://python-poetry.org/
@@ -42,3 +43,5 @@ rosalind perm 3
 [medium]: https://medium.com/@paweldudzinski/python-applications-continuous-integration-with-poetry-and-gitlab-pipelines-ac539888251a
 [pre-commit]: https://pre-commit.com/
 [black docs]: https://black.readthedocs.io/en/stable/version_control_integration.html
+[pytest-cov]: https://pypi.org/project/pytest-cov/
+[snapshottest]: https://pypi.org/project/snapshottest/
