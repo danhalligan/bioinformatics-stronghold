@@ -3,11 +3,10 @@
 repos:
 - repo: https://github.com/psf/black
   rev: 20.8b1
-  exclude:
-  - tests/snapshots/snap_test_cli.py
   hooks:
   - id: black
     language_version: python3
+    exclude: tests/snapshots/snap_test_cli.py
 - repo: https://gitlab.com/pycqa/flake8
   rev: 3.8.4
   hooks:
