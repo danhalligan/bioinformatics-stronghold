@@ -1,16 +1,6 @@
 import re
 import numpy as np
-from rosalind.helpers import read_fasta
-
-
-def count_nucleotides(seq):
-    """Count number of 'A', 'C', 'G', and 'T' occurrences"""
-    return [seq.count(nuc) for nuc in "ACGT"]
-
-
-def dna2rna(seq):
-    """Convert DNA to RNA"""
-    return re.sub("T", "U", seq)
+from rosalind.helpers import read_fasta, Dna
 
 
 def revcomp(seq):
@@ -24,7 +14,7 @@ def gc_content(seq):
 
 
 def max_gc(seqs):
-    gc = [gc_content(rec.seq) for rec in seqs]
+    gc = [Dna(rec.seq).gc_content() for rec in seqs]
     m = gc.index(max(gc))
     return {"name": seqs[m].id, "value": round(gc[m] * 100, 5)}
 
@@ -230,7 +220,7 @@ def count_rnas(seq, mod=1000000):
 
 def find_orfs(seq):
     for s in [seq, revcomp(seq)]:
-        s = dna2rna(s)
+        s = Dna(s).rna()
         for i in range(3):
             subseq = s[i : len(s) - (len(s) - i) % 3]
             for m in re.finditer("(?=(M[^\\*]*)\\*)", translate(subseq)):

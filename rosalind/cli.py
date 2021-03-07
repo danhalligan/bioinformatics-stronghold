@@ -8,19 +8,19 @@ app = typer.Typer()
 @app.command("dna")
 def dna(file: str):
     """Counting DNA Nucleotides"""
-    print(Parser(file).dna().count_bases)
+    print(*list(Parser(file).dna().table().values()))
 
 
 @app.command("rna")
 def rna(file: str):
     """Transcribing DNA into RNA"""
-    print(ros.dna2rna(Parser(file).line()))
+    print(Parser(file).dna().rna())
 
 
 @app.command("revc")
 def revc(file: str):
     """Complementing a Strand of DNA"""
-    print(ros.revcomp(Parser(file).line()))
+    print(Parser(file).dna().revc())
 
 
 @app.command("fib")
@@ -32,8 +32,7 @@ def fib(n: int, k: int):
 @app.command("gc")
 def gc(file: str):
     """Computing GC Content"""
-    x = Parser(file).fastas()
-    res = ros.max_gc(x)
+    res = ros.max_gc(Parser(file).fastas())
     print(res["name"], res["value"], sep="\n")
 
 

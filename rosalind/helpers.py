@@ -9,7 +9,7 @@ class Parser:
 
     def dna(self):
         """Return the first line as a DNA string"""
-        return Dna(self.line)
+        return Dna(self.line())
 
     def line(self):
         return open(self.file).readline().rstrip()
@@ -29,34 +29,42 @@ class Rec:
         self.seq = seq
 
     def __len__(self):
-        return len("".join(self.seq))
+        return len(self.seq)
 
     def seq(self):
         return self.seq
 
 
-class Dna:
-
-    """A DNA sequence"""
-
-    def __init__(self, seq):
-        self.seq = seq
+class Seq:
+    """Sequence methods (either DNA, RNA or Protein)"""
 
     def __len__(self):
         return len(self.seq)
 
-    def __repr__(self):
-        return "Dna(" + self.seq + ")"
+    def __getitem__(self, value):
+        return self.seq.__getitem__(value)
 
-    def count_bases(self):
-        """Count number of 'A', 'C', 'G', and 'T' occurrences"""
-        return [self.seq.count(nuc) for nuc in "ACGT"]
+    def __repr__(self):
+        return self.__class__.__name__ + "(" + self.seq + ")"
+
+    def table(self):
+        """Count number of each letter"""
+        return {x: self.seq.count(x) for x in self.alphabet}
+
+
+class Dna(Seq):
+
+    """A DNA sequence"""
+
+    def __init__(self, seq):
+        self.alphabet = "ACGT"
+        self.seq = seq
 
     def rna(self):
         """Convert DNA to RNA"""
-        return re.sub("T", "U", self.seq)
+        return Rna(re.sub("T", "U", self.seq))
 
-    def revcomp(self):
+    def revc(self):
         """Reverse complement"""
         return self.seq[::-1].translate(str.maketrans("ACGT", "TGCA"))
 
@@ -65,15 +73,32 @@ class Dna:
         return sum([self.seq.count(base) for base in "GC"]) / len(self)
 
     def translate(self):
+        """Translate DNA to protein sequence. The stop codon is removed
+        automatically."""
         code = genetic_code()
         x = self.rna()
         prot = [code[x[i : i + 3]] for i in range(0, len(x), 3)]
-        return "".join(prot)[:-1]
+        prot = "".join(prot)
+        prot = re.sub("\\*$", "", prot)
+        return prot
 
 
-class Prot:
+class Rna(Seq):
 
-    """A Protein sequence"""
+    """An RNA sequence"""
+
+    def __init__(self, seq):
+        self.alphabet = "ACGU"
+        self.seq = seq
+
+
+class Prot(Seq):
+
+    """A protein sequence"""
+
+    def __init__(self, seq):
+        self.alphabet = "*ACDEFGHIKLMNPQRSTVWY"
+        self.seq = seq
 
 
 def read_fasta(handle):

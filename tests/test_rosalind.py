@@ -1,6 +1,6 @@
 from rosalind import __version__
 import rosalind.rosalind as ros
-from rosalind.helpers import Parser
+from rosalind.helpers import Parser, Dna
 import inspect
 
 
@@ -15,20 +15,20 @@ def test_version():
 
 
 def test_dna():
-    dat = testdata().line()
-    assert ros.count_nucleotides(dat) == [20, 12, 17, 21]
+    dat = Dna(testdata().line()).table()
+    assert dat == {"A": 20, "C": 12, "G": 17, "T": 21}
 
 
 def test_rna():
     inp = "GATGGAACTTGACTACGTAAATT"
     out = "GAUGGAACUUGACUACGUAAAUU"
-    assert ros.dna2rna(inp) == out
+    assert Dna(inp).rna().seq == out
 
 
 def test_revcomp():
     inp = "AAAACCCGGT"
     out = "ACCGGGTTTT"
-    assert ros.revcomp(inp) == out
+    assert Dna(inp).revc() == out
 
 
 def test_rabbits():
