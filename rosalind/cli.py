@@ -266,6 +266,17 @@ def kmp(file: str):
     print(*ros.kmp_preprocess(seq))
 
 
+@app.command("rstr")
+def rstr(file: str):
+    import math
+
+    l1, seq = Parser(file).lines()
+    n, x = map(float, l1.split(" "))
+    gc = sum([seq.count(x) for x in "GC"])
+    lam = ((1 - x) / 2) ** (len(seq) - gc) * (x / 2) ** gc * n
+    print(1 - math.exp(-lam))
+
+
 @app.command("spec")
 def spec(file: str):
     """Inferring Protein from Spectrum"""

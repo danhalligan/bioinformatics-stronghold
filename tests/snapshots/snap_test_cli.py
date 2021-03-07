@@ -169,6 +169,11 @@ snapshots[
 """
 
 snapshots[
+    "test_cli_function[rstr] 1"
+] = """0.6885137241525929
+"""
+
+snapshots[
     "test_cli_function[spec] 1"
 ] = """WMQS
 """

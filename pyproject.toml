@@ -26,3 +26,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 rosalind = "rosalind.cli:main"
+
+[tool.black]
+exclude = "tests/snapshots/snap_test_cli.py"
