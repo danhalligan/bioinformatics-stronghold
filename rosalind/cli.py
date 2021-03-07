@@ -24,8 +24,9 @@ def revc(file: str):
 
 
 @app.command("fib")
-def fib(n: int, k: int):
+def fib(file: str):
     """Rabbits and Recurrence Relations"""
+    n, k = map(int, Parser(file).line().split())
     print(ros.rabbits(n, k))
 
 
@@ -44,8 +45,9 @@ def hamm(file: str):
 
 
 @app.command("iprb")
-def iprb(k: int, m: int, n: int):
+def iprb(file: str):
     """Mendel's First Law"""
+    k, m, n = map(int, Parser(file).line().split())
     print(ros.mendel1(k, m, n))
 
 
@@ -75,8 +77,9 @@ def cons(file: str):
 
 
 @app.command("fibd")
-def fibd(n: int, m: int):
+def fibd(file: str):
     """Mortal Fibonacci Rabbits"""
+    n, m = map(int, Parser(file).line().split())
     print(ros.mortal_rabbits(n, m))
 
 
@@ -124,10 +127,11 @@ def orf(file: str):
 
 
 @app.command("perm")
-def perm(n: int):
+def perm(file: str):
     """Enumerating Gene Orders"""
     from itertools import permutations
 
+    n = int(Parser(file).line().split()[0])
     perm = list(permutations(range(1, n + 1)))
     print(len(perm))
     for i in perm:

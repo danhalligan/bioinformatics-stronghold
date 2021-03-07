@@ -41,6 +41,12 @@ class Seq:
     def __len__(self):
         return len(self.seq)
 
+    def __str__(self):
+        return self.seq
+
+    def __eq__(self, other):
+        return self.seq == other
+
     def __getitem__(self, value):
         return self.seq.__getitem__(value)
 
@@ -56,7 +62,7 @@ class Dna(Seq):
 
     """A DNA sequence"""
 
-    def __init__(self, seq):
+    def __init__(self, seq: str):
         self.alphabet = "ACGT"
         self.seq = seq
 
@@ -66,7 +72,7 @@ class Dna(Seq):
 
     def revc(self):
         """Reverse complement"""
-        return self.seq[::-1].translate(str.maketrans("ACGT", "TGCA"))
+        return Dna(self.seq[::-1].translate(str.maketrans("ACGT", "TGCA")))
 
     def gc_content(self):
         """Calculate GC content"""

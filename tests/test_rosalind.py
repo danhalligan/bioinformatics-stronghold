@@ -22,13 +22,11 @@ def test_dna():
 def test_rna():
     inp = "GATGGAACTTGACTACGTAAATT"
     out = "GAUGGAACUUGACUACGUAAAUU"
-    assert Dna(inp).rna().seq == out
+    assert str(Dna(inp).rna()) == out
 
 
 def test_revcomp():
-    inp = "AAAACCCGGT"
-    out = "ACCGGGTTTT"
-    assert Dna(inp).revc() == out
+    assert Dna("AAAACCCGGT").revc() == Dna("ACCGGGTTTT")
 
 
 def test_rabbits():
@@ -51,7 +49,7 @@ def test_mendel1():
 
 def test_translate():
     seq = "AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA"
-    assert ros.translate(seq) == "MAMAPRTEINSTRING"
+    assert Dna(seq).translate() == "MAMAPRTEINSTRING"
 
 
 def test_find_motif():
@@ -103,7 +101,7 @@ def test_find_protein_motif():
 
 
 def test_find_orfs():
-    seq = str(testdata().fastas()[0].seq)
+    seq = Dna(testdata().fastas()[0].seq)
     exp = {"MLLGSFRLIPKETLIQVAGSSPCNLS", "M", "MGMTPRLGLESLLE", "MTPRLGLESLLE"}
     assert set(ros.find_orfs(seq)) == exp
 

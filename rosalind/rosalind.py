@@ -219,8 +219,8 @@ def count_rnas(seq, mod=1000000):
 
 
 def find_orfs(seq):
-    for s in [seq, revcomp(seq)]:
-        s = Dna(s).rna()
+    for s in [seq, seq.revc()]:
+        s = str(s.rna())
         for i in range(3):
             subseq = s[i : len(s) - (len(s) - i) % 3]
             for m in re.finditer("(?=(M[^\\*]*)\\*)", translate(subseq)):
