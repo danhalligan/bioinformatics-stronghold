@@ -3,16 +3,6 @@ import numpy as np
 from rosalind.helpers import read_fasta, Dna
 
 
-def revcomp(seq):
-    """Reverse complement"""
-    return seq[::-1].translate(str.maketrans("ACGT", "TGCA"))
-
-
-def gc_content(seq):
-    """Calculate GC content"""
-    return sum([seq.count(base) for base in "GC"]) / len(seq)
-
-
 def max_gc(seqs):
     gc = [Dna(rec.seq).gc_content() for rec in seqs]
     m = gc.index(max(gc))
