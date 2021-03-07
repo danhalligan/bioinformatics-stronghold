@@ -53,6 +53,11 @@ snapshots[
 """
 
 snapshots[
+    "test_cli_function[kmer] 1"
+] = """4 1 4 3 0 1 1 5 1 3 1 2 2 1 2 0 1 1 3 1 2 1 3 1 1 1 1 2 2 5 1 3 0 2 2 1 1 1 1 3 1 0 0 1 5 5 1 5 0 2 0 2 1 2 1 1 1 2 0 1 0 0 1 1 3 2 1 0 3 2 3 0 0 2 0 8 0 0 1 0 2 1 3 0 0 0 1 4 3 2 1 1 3 1 2 1 3 1 2 1 2 1 1 1 2 3 2 1 1 0 1 1 3 2 1 2 6 2 1 1 1 2 3 3 3 2 3 0 3 2 1 1 0 0 1 4 3 0 1 5 0 2 0 1 2 1 3 0 1 2 2 1 1 0 3 0 0 4 5 0 3 0 2 1 1 3 0 3 2 2 1 1 0 2 1 0 2 2 1 2 0 2 2 5 2 2 1 1 2 1 2 2 2 2 1 1 3 4 0 2 1 1 0 1 2 2 1 1 1 5 2 0 3 2 1 1 2 2 3 0 3 0 1 3 1 2 3 0 2 1 2 2 1 2 3 0 1 2 3 1 1 3 1 0 1 1 3 0 2 1 2 2 0 2 1 1
+"""
+
+snapshots[
     "test_cli_function[kmp] 1"
 ] = """0 0 0 1 2 0 0 0 0 0 0 1 2 1 2 3 4 5 3 0 0
 """
@@ -60,6 +65,26 @@ snapshots[
 snapshots[
     "test_cli_function[lcsm] 1"
 ] = """AC
+"""
+
+snapshots[
+    "test_cli_function[lexf] 1"
+] = """AA
+AC
+AG
+AT
+CA
+CC
+CG
+CT
+GA
+GC
+GG
+GT
+TA
+TC
+TG
+TT
 """
 
 snapshots[
@@ -82,7 +107,13 @@ snapshots[
 ] = """12
 """
 
-snapshots["test_cli_function[orf] 1"] = ""
+snapshots[
+    "test_cli_function[orf] 1"
+] = """M
+MGMTPRLGLESLLE
+MLLGSFRLIPKETLIQVAGSSPCNLS
+MTPRLGLESLLE
+"""
 
 snapshots[
     "test_cli_function[perm] 1"
@@ -93,6 +124,16 @@ snapshots[
 2 3 1
 3 1 2
 3 2 1
+"""
+
+snapshots[
+    "test_cli_function[pper] 1"
+] = """51200
+"""
+
+snapshots[
+    "test_cli_function[prob] 1"
+] = """-5.737 -5.217 -5.263 -5.36 -5.958 -6.628 -7.009
 """
 
 snapshots[
@@ -128,6 +169,26 @@ snapshots[
 """
 
 snapshots[
+    "test_cli_function[spec] 1"
+] = """WMQS
+"""
+
+snapshots[
+    "test_cli_function[splc] 1"
+] = """MVYIADKQHVASREAYGHMFKVCA
+"""
+
+snapshots[
+    "test_cli_function[sseq] 1"
+] = """3 4 5
+"""
+
+snapshots[
     "test_cli_function[subs] 1"
 ] = """2 4 10
+"""
+
+snapshots[
+    "test_cli_function[tran] 1"
+] = """1.2142857142857142
 """

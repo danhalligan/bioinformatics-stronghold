@@ -124,6 +124,10 @@ def mrna(file: str):
 @app.command("orf")
 def orf(file: str):
     """Open Reading Frames"""
+    seq = ros.Dna(Parser(file).fastas()[0].seq)
+    orfs = list(ros.find_orfs(seq))
+    orfs = sorted(list(dict.fromkeys(orfs)))
+    print("\n".join(orfs))
 
 
 @app.command("perm")
@@ -144,13 +148,6 @@ def prtm(file: str):
     print(ros.protein_mass(Parser(file).line()))
 
 
-@app.command("kmp")
-def kmp(file: str):
-    """Shortening the Motif Search"""
-    seq = Parser(file).fastas()[0].seq
-    print(*ros.kmp_preprocess(seq))
-
-
 @app.command("revp")
 def revp(file: str):
     """Locating Restriction Sites"""
@@ -159,6 +156,128 @@ def revp(file: str):
     res.sort()
     for row in res:
         print(*row, sep=" ")
+
+
+@app.command("splc")
+def splc(file: str):
+    """RNA Splicing"""
+    from functools import reduce
+
+    seqs = [x.seq for x in Parser(file).fastas()]
+
+    def trim(gene, intron):
+        s = gene.find(intron)
+        return gene[:s] + gene[s + len(intron) :]
+
+    print(ros.Dna(reduce(trim, seqs)).translate())
+
+
+@app.command("lexf")
+def lexf(file: str):
+    """Enumerating k-mers Lexicographically"""
+    from itertools import product
+
+    l1, l2 = Parser(file).lines()
+    set = l1.split(" ")
+    n = int(l2)
+    perm = list(product(set, repeat=n))
+    perm = ["".join(x) for x in perm]
+    print("\n".join(sorted(perm)))
+
+
+@app.command("pper")
+def pper(file: str):
+    """Partial Permutations"""
+    from functools import reduce
+
+    n, k = map(int, Parser(file).line().split())
+    print(reduce(lambda p, i: int((p * i) % 1e6), range(n, n - k, -1)))
+
+
+@app.command("prob")
+def prob(file: str):
+    """Introduction to Random Strings"""
+    import math
+
+    def logp(c, p):
+        return math.log10({"G": p, "C": p, "A": 1 - p, "T": 1 - p}[c] / 2)
+
+    seq, arr = Parser(file).lines()
+    arr = [float(x) for x in arr.split(" ")]
+    res = [round(sum([logp(c, p) for c in seq]), 3) for p in arr]
+    print(*res)
+
+
+@app.command("sseq")
+def sseq(file: str):
+    """Finding a Spliced Motif"""
+
+    def matches(s1, s2):
+        i, j = 0, 0
+        while i < len(s1) and j < len(s2):
+            if s2[j] == s1[i]:
+                yield (i + 1)
+                j += 1
+            i += 1
+
+    s1, s2 = [x.seq for x in Parser(file).fastas()]
+    print(*list(matches(s1, s2)))
+
+
+@app.command("tran")
+def tran(file: str):
+    """Transitions and Transversions"""
+
+    def ts(x, y):
+        return (x == "A" and y == "G") or (x == "C" and y == "T")
+
+    seqs = [x.seq for x in Parser(file).fastas()]
+    mm, tr = 0, 0
+    for x, y in zip(seqs[0], seqs[1]):
+        if x != y:
+            mm += 1
+            tr += int(ts(x, y) or ts(y, x))
+
+    print(tr / (mm - tr))
+
+
+@app.command("kmer")
+def kmer(file: str):
+    """k-Mer Composition"""
+    from itertools import product
+
+    def kperm(k):
+        set = ["A", "C", "G", "T"]
+        perm = list(product(set, repeat=k))
+        return ["".join(x) for x in perm]
+
+    seq = Parser(file).fastas()[0].seq
+    d = {k: 0 for k in kperm(4)}
+    for i in range(len(seq) - 3):
+        d[seq[i : (i + 4)]] += 1
+
+    print(*d.values())
+
+
+@app.command("kmp")
+def kmp(file: str):
+    """Speeding Up Motif Finding"""
+    seq = Parser(file).fastas()[0].seq
+    print(*ros.kmp_preprocess(seq))
+
+
+@app.command("spec")
+def spec(file: str):
+    """Inferring Protein from Spectrum"""
+    mass = ros.aa_mass()
+
+    def match(weight):
+        dist = [abs(weight - x) for x in mass.values()]
+        return list(mass.keys())[dist.index(min(dist))]
+
+    weights = [float(x) for x in Parser(file).lines()]
+    diff = [j - i for i, j in zip(weights[:-1], weights[1:])]
+    print("".join([match(x) for x in diff]))
 
 
 def main():

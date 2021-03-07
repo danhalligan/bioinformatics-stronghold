@@ -1,4 +1,4 @@
-# Rosalind solver
+# `rosalind`
 
 Solutions to the Rosalind problems in python as a command line app. My solutions
 may be brute force :relaxed:

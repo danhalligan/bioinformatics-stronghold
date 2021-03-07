@@ -227,8 +227,8 @@ def find_orfs(seq):
                 yield m.group(1)
 
 
-def protein_mass(prot):
-    mass = {
+def aa_mass():
+    return {
         "A": 71.03711,
         "C": 103.00919,
         "D": 115.02694,
@@ -251,6 +251,9 @@ def protein_mass(prot):
         "Y": 163.06333,
     }
 
+
+def protein_mass(prot):
+    mass = aa_mass()
     return sum([mass[x] for x in prot])
 
 
