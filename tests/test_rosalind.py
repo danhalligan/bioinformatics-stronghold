@@ -1,4 +1,3 @@
-from rosalind import __version__
 import rosalind.rosalind as ros
 from rosalind.helpers import Parser, Dna
 import inspect
@@ -8,10 +7,6 @@ def testdata(fun=None):
     if fun is None:
         fun = inspect.stack()[1].function
     return Parser("tests/data/" + fun + ".txt")
-
-
-def test_version():
-    assert __version__ == "0.1.0"
 
 
 def test_dna():
