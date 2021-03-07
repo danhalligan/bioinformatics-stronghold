@@ -8,7 +8,7 @@ app = typer.Typer()
 @app.command("dna")
 def dna(file: str):
     """Counting DNA Nucleotides"""
-    print(*ros.count_nucleotides(Parser(file).line()))
+    print(Parser(file).dna().count_bases)
 
 
 @app.command("rna")

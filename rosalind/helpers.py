@@ -7,6 +7,10 @@ class Parser:
     def __init__(self, file):
         self.file = file
 
+    def dna(self):
+        """Return the first line as a DNA string"""
+        return Dna(self.line)
+
     def line(self):
         return open(self.file).readline().rstrip()
 
