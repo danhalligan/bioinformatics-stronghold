@@ -1,5 +1,6 @@
 import typer
 import rosalind.rosalind as ros
+import rosalind.mass as mass
 from rosalind.helpers import Parser
 
 app = typer.Typer()
@@ -145,7 +146,7 @@ def perm(file: str):
 @app.command("prtm")
 def prtm(file: str):
     """Calculating Protein Mass"""
-    print(ros.protein_mass(Parser(file).line()))
+    print(mass.protein_mass(Parser(file).line()))
 
 
 @app.command("revp")
@@ -241,18 +242,24 @@ def tran(file: str):
     print(tr / (mm - tr))
 
 
+def kmer_perm(k):
+    from itertools import product
+
+    set = ["A", "C", "G", "T"]
+    perm = list(product(set, repeat=k))
+    return ["".join(x) for x in perm]
+
+
 @app.command("kmer")
 def kmer(file: str):
     """k-Mer Composition"""
-    from itertools import product
-
-    def kperm(k):
-        set = ["A", "C", "G", "T"]
-        perm = list(product(set, repeat=k))
-        return ["".join(x) for x in perm]
 
     seq = Parser(file).fastas()[0].seq
-    d = {k: 0 for k in kperm(4)}
+
+    # initialise hash with all possible 4-mers permutations
+    d = {k: 0 for k in kmer_perm(4)}
+
+    # Run through 4-mer slices of sequence and increment dictionary keys
     for i in range(len(seq) - 3):
         d[seq[i : (i + 4)]] += 1
 
@@ -280,15 +287,19 @@ def rstr(file: str):
 @app.command("spec")
 def spec(file: str):
     """Inferring Protein from Spectrum"""
-    mass = ros.aa_mass()
-
-    def match(weight):
-        dist = [abs(weight - x) for x in mass.values()]
-        return list(mass.keys())[dist.index(min(dist))]
 
     weights = [float(x) for x in Parser(file).lines()]
     diff = [j - i for i, j in zip(weights[:-1], weights[1:])]
-    print("".join([match(x) for x in diff]))
+    print("".join([mass.match_mass(x) for x in diff]))
+
+
+@app.command("grph")
+def grph(file: str):
+    """Overlap Graphs"""
+    fa = Parser(file).fastas()
+    out = list(ros.overlap_graph(fa))
+    for i in out:
+        print(*i)
 
 
 def main():

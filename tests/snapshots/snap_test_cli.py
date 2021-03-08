@@ -27,6 +27,11 @@ snapshots['test_cli_function[gc] 1'] = '''Rosalind_0808
 60.91954
 '''
 
+snapshots['test_cli_function[grph] 1'] = '''Rosalind_0498 Rosalind_2391
+Rosalind_0498 Rosalind_0442
+Rosalind_2391 Rosalind_2323
+'''
+
 snapshots['test_cli_function[hamm] 1'] = '''7
 '''
 

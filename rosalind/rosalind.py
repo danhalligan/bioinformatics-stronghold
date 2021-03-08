@@ -1,6 +1,12 @@
 import re
 import numpy as np
+import requests as r
+
 from rosalind.helpers import read_fasta, Dna
+from itertools import permutations
+from math import comb
+from functools import reduce
+from io import StringIO
 
 
 def max_gc(seqs):
@@ -23,8 +29,6 @@ def rabbits(n, k):
 
 
 def mendel1(k, m, n):
-    from math import comb
-
     tot = comb(k + m + n, 2)
     poss = comb(k, 2) + k * m + k * n + m * n / 2 + comb(m, 2) * 3 / 4
     return poss / tot
@@ -154,8 +158,6 @@ def find_shared_motif(seqs):
 
 
 def mendel2(k, n):
-    from math import comb
-
     def dbinom(x, size, prob):
         return comb(size, x) * prob ** x * (1 - prob) ** (size - x)
 
@@ -166,9 +168,6 @@ def mendel2(k, n):
 
 
 def get_uniprot(id):
-    import requests as r
-    from io import StringIO
-
     response = r.post(f"https://www.uniprot.org/uniprot/{id}.fasta")
     return list(read_fasta(StringIO(response.text)))[0]
 
@@ -179,7 +178,6 @@ def find_protein_motif(seq, pattern="N[^P][ST][^P]"):
 
 
 def count_rnas(seq, mod=1000000):
-    from functools import reduce
 
     codons = {
         "F": 2,
@@ -217,36 +215,6 @@ def find_orfs(seq):
                 yield m.group(1)
 
 
-def aa_mass():
-    return {
-        "A": 71.03711,
-        "C": 103.00919,
-        "D": 115.02694,
-        "E": 129.04259,
-        "F": 147.06841,
-        "G": 57.02146,
-        "H": 137.05891,
-        "I": 113.08406,
-        "K": 128.09496,
-        "L": 113.08406,
-        "M": 131.04049,
-        "N": 114.04293,
-        "P": 97.05276,
-        "Q": 128.05858,
-        "R": 156.10111,
-        "S": 87.03203,
-        "T": 101.04768,
-        "V": 99.06841,
-        "W": 186.07931,
-        "Y": 163.06333,
-    }
-
-
-def protein_mass(prot):
-    mass = aa_mass()
-    return sum([mass[x] for x in prot])
-
-
 def reverse_pallindromes(seq):
     comp = seq.translate(str.maketrans("ACGT", "TGCA"))
     n = len(seq)
@@ -270,3 +238,9 @@ def kmp_preprocess(seq):
         j += 1
         b.append(j)
     return b[1:]
+
+
+def overlap_graph(seqs):
+    for pair in permutations(seqs, 2):
+        if pair[0].seq.endswith(pair[1].seq[:3]):
+            yield (pair[0].id, pair[1].id)
