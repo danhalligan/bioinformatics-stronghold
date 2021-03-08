@@ -1,6 +1,7 @@
 import typer
 import rosalind.rosalind as ros
 import rosalind.mass as mass
+import rosalind.assembly as assembly
 from rosalind.helpers import Parser
 
 app = typer.Typer()
@@ -311,6 +312,12 @@ def tree(file: str):
     g = ros.Graph(data)
     singletons = n_nodes - len(g.nodes)
     print(g.count_distinct() - 1 + singletons)
+
+
+@app.command("long")
+def long(file: str):
+    seqs = Parser(file).fastas()
+    print(assembly.construct_assembly(seqs))
 
 
 def main():

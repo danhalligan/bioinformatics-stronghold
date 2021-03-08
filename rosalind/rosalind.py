@@ -241,9 +241,11 @@ def kmp_preprocess(seq):
     return b[1:]
 
 
-def overlap_graph(seqs):
+def overlap_graph(seqs, n=3):
+    """Build an overlap graph of sequences where prefix of A matches suffix of
+    B"""
     for pair in permutations(seqs, 2):
-        if pair[0].seq.endswith(pair[1].seq[:3]):
+        if pair[0].seq.endswith(pair[1].seq[:n]):
             yield (pair[0].id, pair[1].id)
 
 
