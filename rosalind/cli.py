@@ -302,5 +302,16 @@ def grph(file: str):
         print(*i)
 
 
+@app.command("tree")
+def tree(file: str):
+    data = Parser(file).lines()
+    n_nodes = int(data[0])
+    data = [x.split(" ") for x in data[1:]]
+
+    g = ros.Graph(data)
+    singletons = n_nodes - len(g.nodes)
+    print(g.count_distinct() - 1 + singletons)
+
+
 def main():
     app()

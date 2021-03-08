@@ -7,6 +7,7 @@ from itertools import permutations
 from math import comb
 from functools import reduce
 from io import StringIO
+from collections import defaultdict
 
 
 def max_gc(seqs):
@@ -244,3 +245,32 @@ def overlap_graph(seqs):
     for pair in permutations(seqs, 2):
         if pair[0].seq.endswith(pair[1].seq[:3]):
             yield (pair[0].id, pair[1].id)
+
+
+class Graph:
+    """Store a graph in a dictionary where key is node and value is a list of
+    connections"""
+
+    def __init__(self, adjacency_list):
+        self.graph = defaultdict(list)
+        for x in adjacency_list:
+            self.graph[x[0]].append(x[1])
+            self.graph[x[1]].append(x[0])
+        self.nodes = list(self.graph.keys())
+
+    def count_distinct(self):
+        visited = {}
+        n_graphs = 0
+
+        def visit_nodes(node):
+            visited[node] = True
+            for i in self.graph[node]:
+                if i not in visited:
+                    visit_nodes(i)
+
+        for node in list(self.nodes):
+            if node not in visited:
+                visit_nodes(node)
+                n_graphs += 1
+
+        return n_graphs

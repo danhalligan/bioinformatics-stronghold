@@ -142,3 +142,6 @@ snapshots['test_cli_function[subs] 1'] = '''2 4 10
 
 snapshots['test_cli_function[tran] 1'] = '''1.2142857142857142
 '''
+
+snapshots['test_cli_function[tree] 1'] = '''3
+'''
