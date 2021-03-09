@@ -305,17 +305,16 @@ def grph(file: str):
 
 @app.command("tree")
 def tree(file: str):
+    """Completing a Tree"""
+    # Nb. A connected tree of n nodes will always contain n-1 edge
     data = Parser(file).lines()
     n_nodes = int(data[0])
-    data = [x.split(" ") for x in data[1:]]
-
-    g = ros.Graph(data)
-    singletons = n_nodes - len(g.nodes)
-    print(g.count_distinct() - 1 + singletons)
+    print(n_nodes - len(data[1:]) - 1)
 
 
 @app.command("long")
 def long(file: str):
+    """Genome Assembly as Shortest Superstring"""
     seqs = Parser(file).fastas()
     print(assembly.construct_assembly(seqs))
 
