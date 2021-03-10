@@ -316,6 +316,7 @@ def tree(file: str):
 def long(file: str):
     """Genome Assembly as Shortest Superstring"""
     seqs = Parser(file).fastas()
+    seqs = dict([(x.id, x.seq) for x in seqs])
     print(assembly.construct_assembly(seqs))
 
 
