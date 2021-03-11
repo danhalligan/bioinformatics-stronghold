@@ -14,6 +14,11 @@ G: 1 1 6 3 0 1 0 0
 T: 1 5 0 0 0 1 1 6
 '''
 
+snapshots['test_cli_function[corr] 1'] = '''TTCAT->TTGAT
+GAGGA->GATGA
+TTTCC->TTTCA
+'''
+
 snapshots['test_cli_function[dna] 1'] = '''20 12 17 21
 '''
 
@@ -68,6 +73,10 @@ TG
 TT
 '''
 
+snapshots['test_cli_function[lgis] 1'] = '''1 2 3
+5 4 2
+'''
+
 snapshots['test_cli_function[lia] 1'] = '''0.68359375
 '''
 
@@ -110,6 +119,9 @@ snapshots['test_cli_function[prot] 1'] = '''MAMAPRTEINSTRING
 '''
 
 snapshots['test_cli_function[prtm] 1'] = '''821.3919199999999
+'''
+
+snapshots['test_cli_function[rear] 1'] = '''9 4 5 7 0
 '''
 
 snapshots['test_cli_function[revc] 1'] = '''ACCGGGTTTT

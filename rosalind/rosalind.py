@@ -7,7 +7,6 @@ from itertools import permutations
 from math import comb
 from functools import reduce
 from io import StringIO
-from collections import defaultdict
 
 
 def max_gc(seqs):
@@ -249,30 +248,44 @@ def overlap_graph(seqs, n=3):
             yield (pair[0].id, pair[1].id)
 
 
-class Graph:
-    """Store a graph in a dictionary where key is node and value is a list of
-    connections"""
+def lis(x):
+    """DP approach to longest increasing subsequence"""
+    n = len(x)
+    d = [1] * n  # length of the longest increasing subsequence ending at i
+    p = [-1] * n  # pointer to previous part of subsequence
 
-    def __init__(self, adjacency_list):
-        self.graph = defaultdict(list)
-        for x in adjacency_list:
-            self.graph[x[0]].append(x[1])
-            self.graph[x[1]].append(x[0])
-        self.nodes = list(self.graph.keys())
+    for i in range(n):
+        for j in range(i):
+            if x[j] < x[i] and d[i] < d[j] + 1:
+                d[i] = d[j] + 1
+                p[i] = j
 
-    def count_distinct(self):
-        visited = {}
-        n_graphs = 0
+    ans = max(d)
+    pos = d.index(ans)
 
-        def visit_nodes(node):
-            visited[node] = True
-            for i in self.graph[node]:
-                if i not in visited:
-                    visit_nodes(i)
+    # traceback
+    subseq = []
+    while pos != -1:
+        subseq.append(x[pos])
+        pos = p[pos]
 
-        for node in list(self.nodes):
-            if node not in visited:
-                visit_nodes(node)
-                n_graphs += 1
+    subseq.reverse()
+    return subseq
 
-        return n_graphs
+
+# Find sequences with errors as those that are unique
+# The remainder (those that are not unique) are assumed to be correct
+# To find how to fix our unique sequences, we find the non-unique version
+# that is one hamming distance away. This ignores the possibility that two
+# unique seqeunces may be from the same read with just one of them having an
+# error. In this case though, we would not be able to determine which one is
+# incorrect anyway...
+def find_errors(seqs):
+    rseqs = [Dna(x).revc().seq for x in seqs]
+    unique = [x for x in seqs if seqs.count(x) + rseqs.count(x) == 1]
+    correct = set(seqs + rseqs).difference(set(unique))
+
+    for x in unique:
+        for y in correct:
+            if hamming(x, y) == 1:
+                yield x + "->" + y

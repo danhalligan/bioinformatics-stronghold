@@ -2,6 +2,7 @@ import typer
 import rosalind.rosalind as ros
 import rosalind.mass as mass
 import rosalind.assembly as assembly
+import rosalind.reversal_distance as revd
 from rosalind.helpers import Parser
 
 app = typer.Typer()
@@ -83,6 +84,15 @@ def fibd(file: str):
     """Mortal Fibonacci Rabbits"""
     n, m = map(int, Parser(file).line().split())
     print(ros.mortal_rabbits(n, m))
+
+
+@app.command("grph")
+def grph(file: str):
+    """Overlap Graphs"""
+    fa = Parser(file).fastas()
+    out = list(ros.overlap_graph(fa))
+    for i in out:
+        print(*i)
 
 
 @app.command("iev")
@@ -187,6 +197,28 @@ def lexf(file: str):
     print("\n".join(sorted(perm)))
 
 
+@app.command("lgis")
+def lgis(file: str):
+    """Longest Increasing Subsequence"""
+
+    data = Parser(file).lines()[1]
+    data = [int(x) for x in data.split(" ")]
+    s1 = ros.lis(data)
+    print(*s1)
+
+    s2 = ros.lis([-x for x in data])
+    s2 = [-x for x in s2]
+    print(*s2)
+
+
+@app.command("long")
+def long(file: str):
+    """Genome Assembly as Shortest Superstring"""
+    seqs = Parser(file).fastas()
+    seqs = dict([(x.id, x.seq) for x in seqs])
+    print(assembly.construct_assembly(seqs))
+
+
 @app.command("pper")
 def pper(file: str):
     """Partial Permutations"""
@@ -243,6 +275,22 @@ def tran(file: str):
     print(tr / (mm - tr))
 
 
+@app.command("tree")
+def tree(file: str):
+    """Completing a Tree"""
+    # Nb. A connected tree of n nodes will always contain n-1 edge
+    data = Parser(file).lines()
+    n_nodes = int(data[0])
+    print(n_nodes - len(data[1:]) - 1)
+
+
+@app.command("corr")
+def corr(file: str):
+    seqs = Parser(file).fastas()
+    seqs = [x.seq for x in seqs]
+    print(*ros.find_errors(seqs), sep="\n")
+
+
 def kmer_perm(k):
     from itertools import product
 
@@ -274,6 +322,13 @@ def kmp(file: str):
     print(*ros.kmp_preprocess(seq))
 
 
+@app.command("rear")
+def rear(file: str):
+    data = open(file).read().strip().split("\n\n")
+    data = [tuple([list(map(int, y.split())) for y in x.split("\n")]) for x in data]
+    print(*[revd.get_distance(s, t) for s, t in data])
+
+
 @app.command("rstr")
 def rstr(file: str):
     import math
@@ -292,32 +347,6 @@ def spec(file: str):
     weights = [float(x) for x in Parser(file).lines()]
     diff = [j - i for i, j in zip(weights[:-1], weights[1:])]
     print("".join([mass.match_mass(x) for x in diff]))
-
-
-@app.command("grph")
-def grph(file: str):
-    """Overlap Graphs"""
-    fa = Parser(file).fastas()
-    out = list(ros.overlap_graph(fa))
-    for i in out:
-        print(*i)
-
-
-@app.command("tree")
-def tree(file: str):
-    """Completing a Tree"""
-    # Nb. A connected tree of n nodes will always contain n-1 edge
-    data = Parser(file).lines()
-    n_nodes = int(data[0])
-    print(n_nodes - len(data[1:]) - 1)
-
-
-@app.command("long")
-def long(file: str):
-    """Genome Assembly as Shortest Superstring"""
-    seqs = Parser(file).fastas()
-    seqs = dict([(x.id, x.seq) for x in seqs])
-    print(assembly.construct_assembly(seqs))
 
 
 def main():
