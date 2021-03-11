@@ -143,6 +143,21 @@ snapshots['test_cli_function[rna] 1'] = '''GAUGGAACUUGACUACGUAAAUU
 snapshots['test_cli_function[rstr] 1'] = '''0.6885137241525929
 '''
 
+snapshots['test_cli_function[sign] 1'] = '''12
+-2 -1
+-2 1
+-2 2
+-1 -2
+-1 1
+-1 2
+1 -2
+1 -1
+1 2
+2 -2
+2 -1
+2 1
+'''
+
 snapshots['test_cli_function[spec] 1'] = '''WMQS
 '''
 

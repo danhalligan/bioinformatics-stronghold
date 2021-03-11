@@ -3,6 +3,7 @@ import rosalind.rosalind as ros
 import rosalind.mass as mass
 import rosalind.assembly as assembly
 import rosalind.reversal_distance as revd
+from itertools import permutations, product
 from rosalind.helpers import Parser
 
 app = typer.Typer()
@@ -145,8 +146,6 @@ def orf(file: str):
 @app.command("perm")
 def perm(file: str):
     """Enumerating Gene Orders"""
-    from itertools import permutations
-
     n = int(Parser(file).line().split()[0])
     perm = list(permutations(range(1, n + 1)))
     print(len(perm))
@@ -240,6 +239,21 @@ def prob(file: str):
     arr = [float(x) for x in arr.split(" ")]
     res = [round(sum([logp(c, p) for c in seq]), 3) for p in arr]
     print(*res)
+
+
+@app.command("sign")
+def sign(file: str):
+    n = int(Parser(file).line().split()[0])
+    perm = list(permutations(range(1, n + 1)))
+    sign = list(product([-1, 1], repeat=n))
+    res = []
+    for p in perm:
+        for s in sign:
+            res.append([x * y for x, y in zip(s, p)])
+
+    print(len(res))
+    for i in res:
+        print(*i)
 
 
 @app.command("sseq")
