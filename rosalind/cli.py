@@ -243,6 +243,7 @@ def prob(file: str):
 
 @app.command("sign")
 def sign(file: str):
+    """Enumerating Oriented Gene Orderings"""
     n = int(Parser(file).line().split()[0])
     perm = list(permutations(range(1, n + 1)))
     sign = list(product([-1, 1], repeat=n))
@@ -300,6 +301,7 @@ def tree(file: str):
 
 @app.command("corr")
 def corr(file: str):
+    """Error Correction in Reads"""
     seqs = Parser(file).fastas()
     seqs = [x.seq for x in seqs]
     print(*ros.find_errors(seqs), sep="\n")
@@ -338,6 +340,7 @@ def kmp(file: str):
 
 @app.command("rear")
 def rear(file: str):
+    """Reversal Distance"""
     data = open(file).read().strip().split("\n\n")
     data = [tuple([list(map(int, y.split())) for y in x.split("\n")]) for x in data]
     print(*[revd.get_distance(s, t) for s, t in data])
@@ -345,6 +348,7 @@ def rear(file: str):
 
 @app.command("rstr")
 def rstr(file: str):
+    """Matching Random Motifs"""
     import math
 
     l1, seq = Parser(file).lines()
