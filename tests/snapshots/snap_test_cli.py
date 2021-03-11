@@ -143,17 +143,13 @@ snapshots['test_cli_function[rna] 1'] = '''GAUGGAACUUGACUACGUAAAUU
 snapshots['test_cli_function[rstr] 1'] = '''0.6885137241525929
 '''
 
-snapshots['test_cli_function[sign] 1'] = '''12
--2 -1
--2 1
--2 2
+snapshots['test_cli_function[sign] 1'] = '''8
 -1 -2
--1 1
 -1 2
 1 -2
-1 -1
 1 2
-2 -2
+-2 -1
+-2 1
 2 -1
 2 1
 '''
@@ -165,6 +161,9 @@ snapshots['test_cli_function[splc] 1'] = '''MVYIADKQHVASREAYGHMFKVCA
 '''
 
 snapshots['test_cli_function[sseq] 1'] = '''3 4 5
+'''
+
+snapshots['test_cli_function[sset] 1'] = '''8
 '''
 
 snapshots['test_cli_function[subs] 1'] = '''2 4 10

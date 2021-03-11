@@ -1,10 +1,12 @@
 import typer
+import math
 import rosalind.rosalind as ros
 import rosalind.mass as mass
 import rosalind.assembly as assembly
 import rosalind.reversal_distance as revd
 from itertools import permutations, product
 from rosalind.helpers import Parser
+from functools import reduce
 
 app = typer.Typer()
 
@@ -172,8 +174,6 @@ def revp(file: str):
 @app.command("splc")
 def splc(file: str):
     """RNA Splicing"""
-    from functools import reduce
-
     seqs = [x.seq for x in Parser(file).fastas()]
 
     def trim(gene, intron):
@@ -186,7 +186,6 @@ def splc(file: str):
 @app.command("lexf")
 def lexf(file: str):
     """Enumerating k-mers Lexicographically"""
-    from itertools import product
 
     l1, l2 = Parser(file).lines()
     set = l1.split(" ")
@@ -221,7 +220,6 @@ def long(file: str):
 @app.command("pper")
 def pper(file: str):
     """Partial Permutations"""
-    from functools import reduce
 
     n, k = map(int, Parser(file).line().split())
     print(reduce(lambda p, i: int((p * i) % 1e6), range(n, n - k, -1)))
@@ -230,7 +228,6 @@ def pper(file: str):
 @app.command("prob")
 def prob(file: str):
     """Introduction to Random Strings"""
-    import math
 
     def logp(c, p):
         return math.log10({"G": p, "C": p, "A": 1 - p, "T": 1 - p}[c] / 2)
@@ -308,8 +305,6 @@ def corr(file: str):
 
 
 def kmer_perm(k):
-    from itertools import product
-
     set = ["A", "C", "G", "T"]
     perm = list(product(set, repeat=k))
     return ["".join(x) for x in perm]
@@ -349,13 +344,19 @@ def rear(file: str):
 @app.command("rstr")
 def rstr(file: str):
     """Matching Random Motifs"""
-    import math
 
     l1, seq = Parser(file).lines()
     n, x = map(float, l1.split(" "))
     gc = sum([seq.count(x) for x in "GC"])
     lam = ((1 - x) / 2) ** (len(seq) - gc) * (x / 2) ** gc * n
     print(1 - math.exp(-lam))
+
+
+@app.command("sset")
+def sset(file: str):
+    """Counting Subsets"""
+    n = int(Parser(file).line().split()[0])
+    print(2 ** n % 1000000)
 
 
 @app.command("spec")
