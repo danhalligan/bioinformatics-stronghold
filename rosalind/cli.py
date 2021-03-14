@@ -368,5 +368,20 @@ def spec(file: str):
     print("".join([mass.match_mass(x) for x in diff]))
 
 
+@app.command("pdst")
+def pdst(file: str):
+    """Inferring Protein from Spectrum"""
+
+    seqs = [x.seq for x in Parser(file).fastas()]
+    n = len(seqs)
+    dst = [[0.0 for x in range(n)] for y in range(n)]
+    for i in range(0, len(seqs)):
+        for j in range(i + 1, len(seqs)):
+            dst[i][j] = dst[j][i] = ros.hamming(seqs[i], seqs[j]) / len(seqs[i])
+
+    for r in dst:
+        print(*[round(x, 3) for x in r])
+
+
 def main():
     app()
