@@ -1,6 +1,6 @@
 import re
 
-from rosalind.helpers import genetic_code, codons
+from rosalind.helpers import genetic_code, codons, memoize
 from math import prod, factorial
 from functools import reduce
 from itertools import permutations, product
@@ -68,17 +68,6 @@ def sign(n):
 def valid_pair(x, y):
     pair = {"A": "U", "U": "A", "C": "G", "G": "C"}
     return x == pair[y]
-
-
-def memoize(f):
-    cache = {}
-
-    def wrapper(*args):
-        if args not in cache:
-            cache[args] = f(*args)
-        return cache[args]
-
-    return wrapper
 
 
 @memoize

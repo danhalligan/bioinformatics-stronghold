@@ -132,3 +132,14 @@ def genetic_code():
 def codons():
     stream = pr.resource_stream(__name__, "data/codons.yaml")
     return yaml.load(stream, Loader=yaml.FullLoader)
+
+
+def memoize(f):
+    cache = {}
+
+    def wrapper(*args):
+        if args not in cache:
+            cache[args] = f(*args)
+        return cache[args]
+
+    return wrapper
