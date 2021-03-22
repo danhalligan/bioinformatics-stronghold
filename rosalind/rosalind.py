@@ -1,11 +1,11 @@
 import re
 import numpy as np
 import requests as r
+import rosalind.alignment as aln
 
 from rosalind.helpers import read_fasta, Dna
 from itertools import permutations
 from math import comb
-from functools import reduce
 from io import StringIO
 
 
@@ -13,19 +13,6 @@ def max_gc(seqs):
     gc = [Dna(rec.seq).gc_content() for rec in seqs]
     m = gc.index(max(gc))
     return {"name": seqs[m].id, "value": round(gc[m] * 100, 5)}
-
-
-def hamming(s1, s2):
-    """Calculate Hamming distance"""
-    return sum(xi != yi for xi, yi in zip(s1, s2))
-
-
-def rabbits(n, k):
-    """Divide and conquer solution to Fibonacci sequence"""
-    a, b = 1, 1
-    for i in range(2, n):
-        a, b = b, k * a + b
-    return b
 
 
 def mendel1(k, m, n):
@@ -127,13 +114,6 @@ def consensus_sequence(mat):
     return "".join(["ACGT"[np.argmax(v)] for v in mat.T])
 
 
-def mortal_rabbits(n, m):
-    v = [1] + (m - 1) * [0]
-    for i in range(2, n + 1):
-        v = [sum(v[1:])] + v[:-1]
-    return sum(v)
-
-
 def expected_offspring(v):
     p = [1, 1, 1, 0.75, 0.5, 0]
     return sum([x[0] * x[1] * 2 for x in zip(v, p)])
@@ -167,52 +147,18 @@ def mendel2(k, n):
     return 1 - pbinom(n - 1, 2 ** k, 0.25)
 
 
+def uniprot_output(id):
+    return r.post(f"https://www.uniprot.org/uniprot/{id}.fasta").text
+
+
 def get_uniprot(id):
-    response = r.post(f"https://www.uniprot.org/uniprot/{id}.fasta")
-    return list(read_fasta(StringIO(response.text)))[0]
+    txt = uniprot_output(id)
+    return list(read_fasta(StringIO(txt)))[0]
 
 
 def find_protein_motif(seq, pattern="N[^P][ST][^P]"):
     motif = re.compile("(?=(" + pattern + "))")
     return [m.start() + 1 for m in motif.finditer(seq)]
-
-
-def count_rnas(seq, mod=1000000):
-
-    codons = {
-        "F": 2,
-        "L": 6,
-        "I": 3,
-        "M": 1,
-        "V": 4,
-        "S": 6,
-        "P": 4,
-        "T": 4,
-        "A": 4,
-        "Y": 2,
-        "H": 2,
-        "Q": 2,
-        "N": 2,
-        "K": 2,
-        "D": 2,
-        "E": 2,
-        "C": 2,
-        "W": 1,
-        "R": 6,
-        "G": 4,
-        "*": 3,
-    }
-    seq = seq + "*"
-    return reduce(lambda p, c: p * codons[c] % mod, seq, 1)
-
-
-def find_orfs(seq):
-    for s in [seq, seq.revc()]:
-        s = str(s.rna())
-        for i in range(3):
-            subseq = s[i : len(s) - (len(s) - i) % 3]
-            for m in re.finditer("(?=(M[^\\*]*)\\*)", translate(subseq)):
-                yield m.group(1)
 
 
 def reverse_pallindromes(seq):
@@ -287,5 +233,5 @@ def find_errors(seqs):
 
     for x in unique:
         for y in correct:
-            if hamming(x, y) == 1:
+            if aln.hamm(x, y) == 1:
                 yield x + "->" + y

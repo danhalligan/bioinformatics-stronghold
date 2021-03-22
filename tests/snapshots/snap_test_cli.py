@@ -7,6 +7,9 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
+snapshots['test_cli_function[aspc] 1'] = '''42
+'''
+
 snapshots['test_cli_function[cons] 1'] = '''ATGCAACT
 A: 5 1 0 0 5 5 0 0
 C: 0 0 1 4 2 0 6 1
@@ -98,6 +101,12 @@ snapshots['test_cli_function[orf] 1'] = '''M
 MGMTPRLGLESLLE
 MLLGSFRLIPKETLIQVAGSSPCNLS
 MTPRLGLESLLE
+'''
+
+snapshots['test_cli_function[pdst] 1'] = '''0.0 0.4 0.1 0.1
+0.4 0.0 0.4 0.3
+0.1 0.4 0.0 0.2
+0.1 0.3 0.2 0.0
 '''
 
 snapshots['test_cli_function[perm] 1'] = '''6

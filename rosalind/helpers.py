@@ -20,6 +20,9 @@ class Parser:
     def fastas(self):
         return list(read_fasta(open(self.file, "r")))
 
+    def seqs(self):
+        return [x.seq for x in self.fastas()]
+
 
 class Rec:
     """A FASTA record"""

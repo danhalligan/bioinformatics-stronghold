@@ -3,6 +3,8 @@ import math
 import rosalind.rosalind as ros
 import rosalind.mass as mass
 import rosalind.assembly as assembly
+import rosalind.alignment as aln
+import rosalind.combinatorics as com
 import rosalind.reversal_distance as revd
 from itertools import permutations, product
 from rosalind.helpers import Parser
@@ -33,7 +35,7 @@ def revc(file: str):
 def fib(file: str):
     """Rabbits and Recurrence Relations"""
     n, k = map(int, Parser(file).line().split())
-    print(ros.rabbits(n, k))
+    print(com.fib(n, k))
 
 
 @app.command("gc")
@@ -47,7 +49,7 @@ def gc(file: str):
 def hamm(file: str):
     """Counting Point Mutations"""
     s1, s2 = Parser(file).lines()
-    print(ros.hamming(s1, s2))
+    print(aln.hamm(s1, s2))
 
 
 @app.command("iprb")
@@ -86,7 +88,7 @@ def cons(file: str):
 def fibd(file: str):
     """Mortal Fibonacci Rabbits"""
     n, m = map(int, Parser(file).line().split())
-    print(ros.mortal_rabbits(n, m))
+    print(com.fibd(n, m))
 
 
 @app.command("grph")
@@ -133,14 +135,14 @@ def mprt(file: str):
 @app.command("mrna")
 def mrna(file: str):
     """Inferring mRNA from Protein"""
-    print(ros.count_rnas(Parser(file).line()))
+    print(com.mrna(Parser(file).line()))
 
 
 @app.command("orf")
 def orf(file: str):
     """Open Reading Frames"""
     seq = ros.Dna(Parser(file).fastas()[0].seq)
-    orfs = list(ros.find_orfs(seq))
+    orfs = list(com.orf(seq))
     orfs = sorted(list(dict.fromkeys(orfs)))
     print("\n".join(orfs))
 
@@ -198,7 +200,6 @@ def lexf(file: str):
 @app.command("lgis")
 def lgis(file: str):
     """Longest Increasing Subsequence"""
-
     data = Parser(file).lines()[1]
     data = [int(x) for x in data.split(" ")]
     s1 = ros.lis(data)
@@ -220,7 +221,6 @@ def long(file: str):
 @app.command("pper")
 def pper(file: str):
     """Partial Permutations"""
-
     n, k = map(int, Parser(file).line().split())
     print(reduce(lambda p, i: int((p * i) % 1e6), range(n, n - k, -1)))
 
@@ -273,24 +273,13 @@ def sseq(file: str):
 @app.command("tran")
 def tran(file: str):
     """Transitions and Transversions"""
-
-    def ts(x, y):
-        return (x == "A" and y == "G") or (x == "C" and y == "T")
-
-    seqs = [x.seq for x in Parser(file).fastas()]
-    mm, tr = 0, 0
-    for x, y in zip(seqs[0], seqs[1]):
-        if x != y:
-            mm += 1
-            tr += int(ts(x, y) or ts(y, x))
-
-    print(tr / (mm - tr))
+    print(aln.tran(Parser(file).seqs()))
 
 
 @app.command("tree")
 def tree(file: str):
     """Completing a Tree"""
-    # Nb. A connected tree of n nodes will always contain n-1 edge
+    # Nb. A connected tree of n nodes will always contain n-1 edges
     data = Parser(file).lines()
     n_nodes = int(data[0])
     print(n_nodes - len(data[1:]) - 1)
@@ -344,7 +333,6 @@ def rear(file: str):
 @app.command("rstr")
 def rstr(file: str):
     """Matching Random Motifs"""
-
     l1, seq = Parser(file).lines()
     n, x = map(float, l1.split(" "))
     gc = sum([seq.count(x) for x in "GC"])
@@ -362,7 +350,6 @@ def sset(file: str):
 @app.command("spec")
 def spec(file: str):
     """Inferring Protein from Spectrum"""
-
     weights = [float(x) for x in Parser(file).lines()]
     diff = [j - i for i, j in zip(weights[:-1], weights[1:])]
     print("".join([mass.match_mass(x) for x in diff]))
@@ -370,17 +357,16 @@ def spec(file: str):
 
 @app.command("pdst")
 def pdst(file: str):
-    """Inferring Protein from Spectrum"""
-
-    seqs = [x.seq for x in Parser(file).fastas()]
-    n = len(seqs)
-    dst = [[0.0 for x in range(n)] for y in range(n)]
-    for i in range(0, len(seqs)):
-        for j in range(i + 1, len(seqs)):
-            dst[i][j] = dst[j][i] = ros.hamming(seqs[i], seqs[j]) / len(seqs[i])
-
-    for r in dst:
+    """Creating a Distance Matrix"""
+    for r in aln.pdst(Parser(file).seqs()):
         print(*[round(x, 3) for x in r])
+
+
+@app.command("aspc")
+def aspc(file: str):
+    """Introduction to Alternative Splicing"""
+    n, k = map(int, Parser(file).line().split())
+    print(sum([math.comb(n, x) for x in range(k, n + 1)]) % 1000000)
 
 
 def main():
