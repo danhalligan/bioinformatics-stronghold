@@ -242,13 +242,7 @@ def prob(file: str):
 def sign(file: str):
     """Enumerating Oriented Gene Orderings"""
     n = int(Parser(file).line().split()[0])
-    perm = list(permutations(range(1, n + 1)))
-    sign = list(product([-1, 1], repeat=n))
-    res = []
-    for p in perm:
-        for s in sign:
-            res.append([x * y for x, y in zip(s, p)])
-
+    res = com.sign(n)
     print(len(res))
     for i in res:
         print(*i)
@@ -367,6 +361,24 @@ def aspc(file: str):
     """Introduction to Alternative Splicing"""
     n, k = map(int, Parser(file).line().split())
     print(sum([math.comb(n, x) for x in range(k, n + 1)]) % 1000000)
+
+
+@app.command("cat")
+def cat(file: str):
+    """Introduction to Alternative Splicing"""
+    seq = Parser(file).seqs()[0]
+    print(com.cat(seq))
+
+
+@app.command("inod")
+def inod(file: str):
+    n = int(Parser(file).line().split()[0])
+    print(n - 2)
+
+
+@app.command("mmch")
+def mmch(file: str):
+    print(com.mmch(Parser(file).seqs()[0]))
 
 
 def main():

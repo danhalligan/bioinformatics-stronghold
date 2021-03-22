@@ -1,5 +1,5 @@
 import re
-import pkg_resources
+import pkg_resources as pr
 import yaml
 
 
@@ -125,10 +125,10 @@ def read_fasta(handle):
 
 
 def genetic_code():
-    stream = pkg_resources.resource_stream(__name__, "data/genetic_code.yaml")
+    stream = pr.resource_stream(__name__, "data/genetic_code.yaml")
     return yaml.load(stream, Loader=yaml.FullLoader)
 
 
 def codons():
-    stream = pkg_resources.resource_stream(__name__, "data/codons.yaml")
+    stream = pr.resource_stream(__name__, "data/codons.yaml")
     return yaml.load(stream, Loader=yaml.FullLoader)

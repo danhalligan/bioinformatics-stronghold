@@ -10,6 +10,9 @@ snapshots = Snapshot()
 snapshots['test_cli_function[aspc] 1'] = '''42
 '''
 
+snapshots['test_cli_function[cat] 1'] = '''2
+'''
+
 snapshots['test_cli_function[cons] 1'] = '''ATGCAACT
 A: 5 1 0 0 5 5 0 0
 C: 0 0 1 4 2 0 6 1
@@ -44,6 +47,9 @@ snapshots['test_cli_function[hamm] 1'] = '''7
 '''
 
 snapshots['test_cli_function[iev] 1'] = '''3.5
+'''
+
+snapshots['test_cli_function[inod] 1'] = '''2
 '''
 
 snapshots['test_cli_function[iprb] 1'] = '''0.7833333333333333
@@ -84,6 +90,9 @@ snapshots['test_cli_function[lia] 1'] = '''0.68359375
 '''
 
 snapshots['test_cli_function[long] 1'] = '''ATTAGACCTGCCGGAATAC
+'''
+
+snapshots['test_cli_function[mmch] 1'] = '''6
 '''
 
 snapshots['test_cli_function[mprt] 1'] = '''B5ZC00
