@@ -167,8 +167,7 @@ def prtm(file: str):
 def revp(file: str):
     """Locating Restriction Sites"""
     seq = Parser(file).fastas()[0].seq
-    res = list(ros.reverse_pallindromes(seq))
-    res.sort()
+    res = sorted(ros.reverse_pallindromes(seq))
     for row in res:
         print(*row, sep=" ")
 
@@ -192,8 +191,7 @@ def lexf(file: str):
     l1, l2 = Parser(file).lines()
     set = l1.split(" ")
     n = int(l2)
-    perm = list(product(set, repeat=n))
-    perm = ["".join(x) for x in perm]
+    perm = ["".join(x) for x in product(set, repeat=n)]
     print("\n".join(sorted(perm)))
 
 
@@ -365,19 +363,21 @@ def aspc(file: str):
 
 @app.command("cat")
 def cat(file: str):
-    """Introduction to Alternative Splicing"""
+    """Catalan Numbers and RNA Secondary Structures"""
     seq = Parser(file).seqs()[0]
     print(com.cat(seq))
 
 
 @app.command("inod")
 def inod(file: str):
+    """Counting Phylogenetic Ancestors"""
     n = int(Parser(file).line().split()[0])
     print(n - 2)
 
 
 @app.command("mmch")
 def mmch(file: str):
+    """Maximum Matchings and RNA Secondary Structures"""
     print(com.mmch(Parser(file).seqs()[0]))
 
 
