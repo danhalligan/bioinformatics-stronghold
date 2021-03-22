@@ -1,5 +1,6 @@
 import re
 
+from rosalind.helpers import genetic_code, codons
 from math import prod, factorial
 from functools import reduce
 
@@ -22,100 +23,9 @@ def fibd(n, m):
 
 def mrna(seq, mod=1000000):
     """Inferring mRNA from Protein"""
-    codons = {
-        "F": 2,
-        "L": 6,
-        "I": 3,
-        "M": 1,
-        "V": 4,
-        "S": 6,
-        "P": 4,
-        "T": 4,
-        "A": 4,
-        "Y": 2,
-        "H": 2,
-        "Q": 2,
-        "N": 2,
-        "K": 2,
-        "D": 2,
-        "E": 2,
-        "C": 2,
-        "W": 1,
-        "R": 6,
-        "G": 4,
-        "*": 3,
-    }
+    cod = codons()
     seq = seq + "*"
-    return reduce(lambda p, c: p * codons[c] % mod, seq, 1)
-
-
-def genetic_code():
-    return {
-        "UUU": "F",
-        "UCU": "S",
-        "UAU": "Y",
-        "UGU": "C",
-        "UUC": "F",
-        "UCC": "S",
-        "UAC": "Y",
-        "UGC": "C",
-        "UUA": "L",
-        "UCA": "S",
-        "UAA": "*",
-        "UGA": "*",
-        "UUG": "L",
-        "UCG": "S",
-        "UAG": "*",
-        "UGG": "W",
-        "CUU": "L",
-        "CCU": "P",
-        "CAU": "H",
-        "CGU": "R",
-        "CUC": "L",
-        "CCC": "P",
-        "CAC": "H",
-        "CGC": "R",
-        "CUA": "L",
-        "CCA": "P",
-        "CAA": "Q",
-        "CGA": "R",
-        "CUG": "L",
-        "CCG": "P",
-        "CAG": "Q",
-        "CGG": "R",
-        "AUU": "I",
-        "ACU": "T",
-        "AAU": "N",
-        "AGU": "S",
-        "AUC": "I",
-        "ACC": "T",
-        "AAC": "N",
-        "AGC": "S",
-        "AUA": "I",
-        "ACA": "T",
-        "AAA": "K",
-        "AGA": "R",
-        "AUG": "M",
-        "ACG": "T",
-        "AAG": "K",
-        "AGG": "R",
-        "GUU": "V",
-        "GCU": "A",
-        "GAU": "D",
-        "GGU": "G",
-        "GUC": "V",
-        "GCC": "A",
-        "GAC": "D",
-        "GGC": "G",
-        "GUA": "V",
-        "GCA": "A",
-        "GAA": "E",
-        "GGA": "G",
-        "GUG": "V",
-        "GCG": "A",
-        "GAG": "E",
-        "GGG": "G",
-    }
+    return reduce(lambda p, c: p * cod[c] % mod, seq, 1)
 
 
 def translate(seq):

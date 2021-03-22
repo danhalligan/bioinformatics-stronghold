@@ -3,7 +3,7 @@ import numpy as np
 import requests as r
 import rosalind.alignment as aln
 
-from rosalind.helpers import read_fasta, Dna
+from rosalind.helpers import read_fasta, Dna, genetic_code
 from itertools import permutations
 from math import comb
 from io import StringIO
@@ -19,75 +19,6 @@ def mendel1(k, m, n):
     tot = comb(k + m + n, 2)
     poss = comb(k, 2) + k * m + k * n + m * n / 2 + comb(m, 2) * 3 / 4
     return poss / tot
-
-
-def genetic_code():
-    return {
-        "UUU": "F",
-        "UCU": "S",
-        "UAU": "Y",
-        "UGU": "C",
-        "UUC": "F",
-        "UCC": "S",
-        "UAC": "Y",
-        "UGC": "C",
-        "UUA": "L",
-        "UCA": "S",
-        "UAA": "*",
-        "UGA": "*",
-        "UUG": "L",
-        "UCG": "S",
-        "UAG": "*",
-        "UGG": "W",
-        "CUU": "L",
-        "CCU": "P",
-        "CAU": "H",
-        "CGU": "R",
-        "CUC": "L",
-        "CCC": "P",
-        "CAC": "H",
-        "CGC": "R",
-        "CUA": "L",
-        "CCA": "P",
-        "CAA": "Q",
-        "CGA": "R",
-        "CUG": "L",
-        "CCG": "P",
-        "CAG": "Q",
-        "CGG": "R",
-        "AUU": "I",
-        "ACU": "T",
-        "AAU": "N",
-        "AGU": "S",
-        "AUC": "I",
-        "ACC": "T",
-        "AAC": "N",
-        "AGC": "S",
-        "AUA": "I",
-        "ACA": "T",
-        "AAA": "K",
-        "AGA": "R",
-        "AUG": "M",
-        "ACG": "T",
-        "AAG": "K",
-        "AGG": "R",
-        "GUU": "V",
-        "GCU": "A",
-        "GAU": "D",
-        "GGU": "G",
-        "GUC": "V",
-        "GCC": "A",
-        "GAC": "D",
-        "GGC": "G",
-        "GUA": "V",
-        "GCA": "A",
-        "GAA": "E",
-        "GGA": "G",
-        "GUG": "V",
-        "GCG": "A",
-        "GAG": "E",
-        "GGG": "G",
-    }
 
 
 def translate(seq):
