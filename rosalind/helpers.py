@@ -1,6 +1,7 @@
 import re
 import pkg_resources as pr
 import yaml
+import string
 
 
 class Parser:
@@ -25,6 +26,12 @@ class Parser:
     def seqs(self):
         return [x.seq for x in self.fastas()]
 
+    def ints(self):
+        return list(map(int, self.line().split()))
+
+    def floats(self):
+        return list(map(float, self.line().split()))
+
 
 class Rec:
     """A FASTA record"""
@@ -36,12 +43,14 @@ class Rec:
     def __len__(self):
         return len(self.seq)
 
-    def seq(self):
-        return self.seq
-
 
 class Seq:
     """Sequence methods (either DNA, RNA or Protein)"""
+
+    def __init__(self, seq: str):
+        if 0 in [c in self.alphabet for c in seq]:
+            raise TypeError("String contains invalid characters!")
+        self.seq = seq
 
     def __len__(self):
         return len(self.seq)
@@ -53,7 +62,7 @@ class Seq:
         return self.seq == other
 
     def __getitem__(self, value):
-        return self.seq.__getitem__(value)
+        return type(self)(self.seq.__getitem__(value))
 
     def __repr__(self):
         return self.__class__.__name__ + "(" + self.seq + ")"
@@ -62,14 +71,13 @@ class Seq:
         """Count number of each letter"""
         return {x: self.seq.count(x) for x in self.alphabet}
 
+    @property
+    def alphabet(self):
+        return string.ascii_uppercase
+
 
 class Dna(Seq):
-
     """A DNA sequence"""
-
-    def __init__(self, seq: str):
-        self.alphabet = "ACGT"
-        self.seq = seq
 
     def rna(self):
         """Convert DNA to RNA"""
@@ -87,29 +95,31 @@ class Dna(Seq):
         """Translate DNA to protein sequence. The stop codon is removed
         automatically."""
         code = genetic_code()
-        x = self.rna()
+        x = self.rna().seq
         prot = [code[x[i : i + 3]] for i in range(0, len(x), 3)]
         prot = "".join(prot)
-        prot = re.sub("\\*$", "", prot)
+        prot = Prot(re.sub("\\*$", "", prot))
         return prot
+
+    @property
+    def alphabet(self):
+        return "ACGT"
 
 
 class Rna(Seq):
-
     """An RNA sequence"""
 
-    def __init__(self, seq):
-        self.alphabet = "ACGU"
-        self.seq = seq
+    @property
+    def alphabet(self):
+        return "ACGU"
 
 
 class Prot(Seq):
-
     """A protein sequence"""
 
-    def __init__(self, seq):
-        self.alphabet = "*ACDEFGHIKLMNPQRSTVWY"
-        self.seq = seq
+    @property
+    def alphabet(self):
+        return "*ACDEFGHIKLMNPQRSTVWY"
 
 
 def read_fasta(handle):
@@ -131,6 +141,11 @@ def genetic_code():
 
 def codons():
     stream = pr.resource_stream(__name__, "data/codons.yaml")
+    return yaml.load(stream, Loader=yaml.FullLoader)
+
+
+def aa_mass():
+    stream = pr.resource_stream(__name__, "data/aa_mass.yaml")
     return yaml.load(stream, Loader=yaml.FullLoader)
 
 

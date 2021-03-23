@@ -5,9 +5,10 @@ import rosalind.mass as mass
 import rosalind.assembly as assembly
 import rosalind.alignment as aln
 import rosalind.combinatorics as com
-import rosalind.reversal_distance as revd
-from itertools import permutations, product
+import rosalind.graph as graph
+
 from rosalind.helpers import Parser
+from itertools import permutations, product
 from functools import reduce
 
 app = typer.Typer()
@@ -34,7 +35,7 @@ def revc(file: str):
 @app.command("fib")
 def fib(file: str):
     """Rabbits and Recurrence Relations"""
-    n, k = map(int, Parser(file).line().split())
+    n, k = Parser(file).ints()
     print(com.fib(n, k))
 
 
@@ -55,7 +56,7 @@ def hamm(file: str):
 @app.command("iprb")
 def iprb(file: str):
     """Mendel's First Law"""
-    k, m, n = map(int, Parser(file).line().split())
+    k, m, n = Parser(file).ints()
     print(ros.mendel1(k, m, n))
 
 
@@ -76,7 +77,7 @@ def subs(file: str):
 @app.command("cons")
 def cons(file: str):
     """Consensus and Profile"""
-    x = [x.seq for x in Parser(file).fastas()]
+    x = Parser(file).seqs()
     mat = ros.profile_matrix(x)
     cons = ros.consensus_sequence(mat)
     print(cons)
@@ -87,7 +88,7 @@ def cons(file: str):
 @app.command("fibd")
 def fibd(file: str):
     """Mortal Fibonacci Rabbits"""
-    n, m = map(int, Parser(file).line().split())
+    n, m = Parser(file).ints()
     print(com.fibd(n, m))
 
 
@@ -95,7 +96,7 @@ def fibd(file: str):
 def grph(file: str):
     """Overlap Graphs"""
     fa = Parser(file).fastas()
-    out = list(ros.overlap_graph(fa))
+    out = list(graph.overlap_graph(fa))
     for i in out:
         print(*i)
 
@@ -103,21 +104,21 @@ def grph(file: str):
 @app.command("iev")
 def iev(file: str):
     """Calculating Expected Offspring"""
-    v = map(int, Parser(file).line().split())
+    v = Parser(file).ints()
     print(ros.expected_offspring(v))
 
 
 @app.command("lcsm")
 def lcsm(file: str):
     """Finding a Shared Motif"""
-    seqs = [x.seq for x in Parser(file).fastas()]
+    seqs = Parser(file).seqs()
     print(ros.find_shared_motif(seqs))
 
 
 @app.command("lia")
 def lia(file: str):
     """Independent Alleles"""
-    k, n = map(int, Parser(file).line().split())
+    k, n = Parser(file).ints()
     print(ros.mendel2(k, n))
 
 
@@ -150,7 +151,7 @@ def orf(file: str):
 @app.command("perm")
 def perm(file: str):
     """Enumerating Gene Orders"""
-    n = int(Parser(file).line().split()[0])
+    n = Parser(file).ints()[0]
     perm = list(permutations(range(1, n + 1)))
     print(len(perm))
     for i in perm:
@@ -175,12 +176,12 @@ def revp(file: str):
 @app.command("splc")
 def splc(file: str):
     """RNA Splicing"""
-    seqs = [x.seq for x in Parser(file).fastas()]
 
     def trim(gene, intron):
         s = gene.find(intron)
         return gene[:s] + gene[s + len(intron) :]
 
+    seqs = Parser(file).seqs()
     print(ros.Dna(reduce(trim, seqs)).translate())
 
 
@@ -219,7 +220,7 @@ def long(file: str):
 @app.command("pper")
 def pper(file: str):
     """Partial Permutations"""
-    n, k = map(int, Parser(file).line().split())
+    n, k = Parser(file).ints()
     print(reduce(lambda p, i: int((p * i) % 1e6), range(n, n - k, -1)))
 
 
@@ -239,7 +240,7 @@ def prob(file: str):
 @app.command("sign")
 def sign(file: str):
     """Enumerating Oriented Gene Orderings"""
-    n = int(Parser(file).line().split()[0])
+    n = Parser(file).ints()[0]
     res = com.sign(n)
     print(len(res))
     for i in res:
@@ -282,7 +283,7 @@ def corr(file: str):
     """Error Correction in Reads"""
     seqs = Parser(file).fastas()
     seqs = [x.seq for x in seqs]
-    print(*ros.find_errors(seqs), sep="\n")
+    print(*assembly.find_errors(seqs), sep="\n")
 
 
 def kmer_perm(k):
@@ -319,7 +320,7 @@ def rear(file: str):
     """Reversal Distance"""
     data = open(file).read().strip().split("\n\n")
     data = [tuple([list(map(int, y.split())) for y in x.split("\n")]) for x in data]
-    print(*[revd.get_distance(s, t) for s, t in data])
+    print(*[com.get_distance(s, t) for s, t in data])
 
 
 @app.command("rstr")
@@ -335,7 +336,7 @@ def rstr(file: str):
 @app.command("sset")
 def sset(file: str):
     """Counting Subsets"""
-    n = int(Parser(file).line().split()[0])
+    n = Parser(file).ints()[0]
     print(2 ** n % 1000000)
 
 
@@ -357,7 +358,7 @@ def pdst(file: str):
 @app.command("aspc")
 def aspc(file: str):
     """Introduction to Alternative Splicing"""
-    n, k = map(int, Parser(file).line().split())
+    n, k = Parser(file).ints()
     print(sum([math.comb(n, x) for x in range(k, n + 1)]) % 1000000)
 
 
@@ -371,7 +372,7 @@ def cat(file: str):
 @app.command("inod")
 def inod(file: str):
     """Counting Phylogenetic Ancestors"""
-    n = int(Parser(file).line().split()[0])
+    n = Parser(file).ints()[0]
     print(n - 2)
 
 
@@ -379,6 +380,56 @@ def inod(file: str):
 def mmch(file: str):
     """Maximum Matchings and RNA Secondary Structures"""
     print(com.mmch(Parser(file).seqs()[0]))
+
+
+@app.command("afrq")
+def afrq(file: str):
+    """Counting Disease Carriers"""
+    a = Parser(file).floats()
+    b = [2 * math.sqrt(x) * (1 - math.sqrt(x)) + x for x in a]
+    print(*[round(x, 3) for x in b])
+
+
+@app.command("conv")
+def conv(file: str):
+    """Comparing Spectra with the Spectral Convolution"""
+    l1, l2 = Parser(file).lines()
+    s1 = list(map(float, l1.split()))
+    s2 = list(map(float, l2.split()))
+    res = mass.conv(s1, s2)
+    print(res[1], res[0], sep="\n")
+
+
+@app.command("ebin")
+def ebin(file: str):
+    """Wright-Fisher's Expected Behavior"""
+    l1, l2 = Parser(file).lines()
+    n = int(l1)
+    s2 = list(map(float, l2.split()))
+    print(*[round(x * n, 3) for x in s2])
+
+
+@app.command("edit")
+def edit(file: str):
+    """Edit Distance"""
+    seqs = Parser(file).seqs()
+    print(aln.edit(seqs[0], seqs[1]))
+
+
+@app.command("edta")
+def edta(file: str):
+    """Edit Distance Alignment"""
+    seqs = Parser(file).seqs()
+    out = aln.edta(seqs[0], seqs[1])
+    print(out["dist"], out["a1"], out["a2"], sep="\n")
+
+
+@app.command("trie")
+def trie(file: str):
+    """Introduction to Pattern Matching"""
+    seqs = Parser(file).lines()
+    for line in graph.trie(seqs):
+        print(*line)
 
 
 def main():

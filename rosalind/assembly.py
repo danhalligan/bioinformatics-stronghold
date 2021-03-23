@@ -1,4 +1,6 @@
 from math import floor
+from rosalind.helpers import Dna
+import rosalind.alignment as aln
 
 
 # Fast find match using `find`
@@ -44,3 +46,21 @@ def construct_assembly(seqs):
 
     # Join all sequences
     return "".join(seq)
+
+
+# Find sequences with errors as those that are unique
+# The remainder (those that are not unique) are assumed to be correct
+# To find how to fix our unique sequences, we find the non-unique version
+# that is one hamming distance away. This ignores the possibility that two
+# unique seqeunces may be from the same read with just one of them having an
+# error. In this case though, we would not be able to determine which one is
+# incorrect anyway...
+def find_errors(seqs):
+    rseqs = [Dna(x).revc().seq for x in seqs]
+    unique = [x for x in seqs if seqs.count(x) + rseqs.count(x) == 1]
+    correct = set(seqs + rseqs).difference(set(unique))
+
+    for x in unique:
+        for y in correct:
+            if aln.hamm(x, y) == 1:
+                yield x + "->" + y

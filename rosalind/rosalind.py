@@ -1,10 +1,8 @@
 import re
 import numpy as np
 import requests as r
-import rosalind.alignment as aln
 
 from rosalind.helpers import read_fasta, Dna, genetic_code
-from itertools import permutations
 from math import comb
 from io import StringIO
 
@@ -117,14 +115,6 @@ def kmp_preprocess(seq):
     return b[1:]
 
 
-def overlap_graph(seqs, n=3):
-    """Build an overlap graph of sequences where prefix of A matches suffix of
-    B"""
-    for pair in permutations(seqs, 2):
-        if pair[0].seq.endswith(pair[1].seq[:n]):
-            yield (pair[0].id, pair[1].id)
-
-
 def lis(x):
     """DP approach to longest increasing subsequence"""
     n = len(x)
@@ -148,21 +138,3 @@ def lis(x):
 
     subseq.reverse()
     return subseq
-
-
-# Find sequences with errors as those that are unique
-# The remainder (those that are not unique) are assumed to be correct
-# To find how to fix our unique sequences, we find the non-unique version
-# that is one hamming distance away. This ignores the possibility that two
-# unique seqeunces may be from the same read with just one of them having an
-# error. In this case though, we would not be able to determine which one is
-# incorrect anyway...
-def find_errors(seqs):
-    rseqs = [Dna(x).revc().seq for x in seqs]
-    unique = [x for x in seqs if seqs.count(x) + rseqs.count(x) == 1]
-    correct = set(seqs + rseqs).difference(set(unique))
-
-    for x in unique:
-        for y in correct:
-            if aln.hamm(x, y) == 1:
-                yield x + "->" + y

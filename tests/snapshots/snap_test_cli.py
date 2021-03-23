@@ -7,6 +7,9 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
+snapshots['test_cli_function[afrq] 1'] = '''0.532 0.75 0.914
+'''
+
 snapshots['test_cli_function[aspc] 1'] = '''42
 '''
 
@@ -20,12 +23,27 @@ G: 1 1 6 3 0 1 0 0
 T: 1 5 0 0 0 1 1 6
 '''
 
+snapshots['test_cli_function[conv] 1'] = '''3
+85.03163
+'''
+
 snapshots['test_cli_function[corr] 1'] = '''TTCAT->TTGAT
 GAGGA->GATGA
 TTTCC->TTTCA
 '''
 
 snapshots['test_cli_function[dna] 1'] = '''20 12 17 21
+'''
+
+snapshots['test_cli_function[ebin] 1'] = '''1.7 3.4 5.1
+'''
+
+snapshots['test_cli_function[edit] 1'] = '''5
+'''
+
+snapshots['test_cli_function[edta] 1'] = '''4
+PRET-TY
+PRTTEIN
 '''
 
 snapshots['test_cli_function[fib] 1'] = '''19
@@ -191,4 +209,15 @@ snapshots['test_cli_function[tran] 1'] = '''1.2142857142857142
 '''
 
 snapshots['test_cli_function[tree] 1'] = '''3
+'''
+
+snapshots['test_cli_function[trie] 1'] = '''1 2 A
+2 3 T
+3 4 A
+4 5 G
+5 6 A
+3 7 C
+1 8 G
+8 9 A
+9 10 T
 '''
