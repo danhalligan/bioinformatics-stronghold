@@ -2,7 +2,7 @@ import re
 import numpy as np
 import requests as r
 
-from rosalind.helpers import read_fasta, Dna, genetic_code
+from rosalind.helpers import read_fasta, Dna
 from math import comb
 from io import StringIO
 
@@ -17,11 +17,6 @@ def mendel1(k, m, n):
     tot = comb(k + m + n, 2)
     poss = comb(k, 2) + k * m + k * n + m * n / 2 + comb(m, 2) * 3 / 4
     return poss / tot
-
-
-def translate(seq):
-    code = genetic_code()
-    return "".join([code[seq[i : i + 3]] for i in range(0, len(seq), 3)])[:-1]
 
 
 def find_motif(seq1, seq2):

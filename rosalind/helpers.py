@@ -5,7 +5,7 @@ import string
 
 
 class Parser:
-    """Parse problem data"""
+    """Parse problem data text files"""
 
     def __init__(self, file):
         self.file = file
@@ -14,27 +14,37 @@ class Parser:
         """Return the first line as a DNA string"""
         return Dna(self.line())
 
+    def rna(self):
+        """Return the first line as a RNA string"""
+        return Rna(self.line())
+
     def line(self):
+        """Return the first line"""
         return open(self.file).readline().rstrip()
 
     def lines(self):
+        """Return lines as a chomped list"""
         return open(self.file).read().splitlines()
 
     def fastas(self):
+        """Return fasta records as a list"""
         return list(read_fasta(open(self.file, "r")))
 
     def seqs(self):
+        """Return sequences from fasta records as a list"""
         return [x.seq for x in self.fastas()]
 
     def ints(self):
+        """Return space separated integers from first line"""
         return list(map(int, self.line().split()))
 
     def floats(self):
+        """Return space separated floats from first line"""
         return list(map(float, self.line().split()))
 
 
 class Rec:
-    """A FASTA record"""
+    """A simple FASTA record"""
 
     def __init__(self, id, seq):
         self.id = id
@@ -45,7 +55,7 @@ class Rec:
 
 
 class Seq:
-    """Sequence methods (either DNA, RNA or Protein)"""
+    """A sequence with a specified alphabet (either DNA, RNA or Protein)"""
 
     def __init__(self, seq: str):
         if 0 in [c in self.alphabet for c in seq]:
@@ -94,12 +104,7 @@ class Dna(Seq):
     def translate(self):
         """Translate DNA to protein sequence. The stop codon is removed
         automatically."""
-        code = genetic_code()
-        x = self.rna().seq
-        prot = [code[x[i : i + 3]] for i in range(0, len(x), 3)]
-        prot = "".join(prot)
-        prot = Prot(re.sub("\\*$", "", prot))
-        return prot
+        return self.rna().translate()
 
     @property
     def alphabet(self):
@@ -109,9 +114,25 @@ class Dna(Seq):
 class Rna(Seq):
     """An RNA sequence"""
 
+    def __init__(self, seq: str):
+        super().__init__(seq)
+        self._code = self._genetic_code()
+
     @property
     def alphabet(self):
         return "ACGU"
+
+    def translate(self):
+        """Translate RNA to protein sequence. The stop codon is removed
+        automatically."""
+        x = self.seq
+        prot = [self._code[x[i : i + 3]] for i in range(0, len(x), 3)]
+        prot = "".join(prot)
+        return Prot(re.sub("\\*$", "", prot))
+
+    def _genetic_code(self):
+        stream = pr.resource_stream(__name__, "data/genetic_code.yaml")
+        return yaml.load(stream, Loader=yaml.FullLoader)
 
 
 class Prot(Seq):
@@ -132,11 +153,6 @@ def read_fasta(handle):
         else:
             sequence.append(line.strip())
     yield Rec(header, "".join(sequence))
-
-
-def genetic_code():
-    stream = pr.resource_stream(__name__, "data/genetic_code.yaml")
-    return yaml.load(stream, Loader=yaml.FullLoader)
 
 
 def codons():

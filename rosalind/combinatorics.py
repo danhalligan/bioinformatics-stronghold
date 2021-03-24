@@ -1,6 +1,6 @@
 import re
 
-from rosalind.helpers import genetic_code, codons, memoize
+from rosalind.helpers import codons, memoize
 from math import prod, factorial
 from functools import reduce
 from itertools import permutations, product, combinations
@@ -29,18 +29,12 @@ def mrna(seq, mod=1000000):
     return reduce(lambda p, c: p * cod[c] % mod, seq, 1)
 
 
-def translate(seq):
-    code = genetic_code()
-    return "".join([code[seq[i : i + 3]] for i in range(0, len(seq), 3)])[:-1]
-
-
 def orf(seq):
     """Open Reading Frames"""
     for x in [seq, seq.revc()]:
-        x = str(x.rna())
         for i in range(3):
             subseq = x[i : len(x) - (len(x) - i) % 3]
-            for m in re.finditer("(?=(M[^\\*]*)\\*)", translate(subseq)):
+            for m in re.finditer("(?=(M[^\\*]*)\\*)", subseq.translate().seq):
                 yield m.group(1)
 
 
@@ -71,7 +65,7 @@ def valid_pair(x, y):
 
 
 @memoize
-def cat(seq, mod=10 ** 6):
+def cat(seq, mod=1000000):
     """Calculate total number of noncrossing perfect matchings"""
     if len(seq) in range(1):
         return 1

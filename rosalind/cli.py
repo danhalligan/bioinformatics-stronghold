@@ -63,8 +63,7 @@ def iprb(file: str):
 @app.command("prot")
 def prot(file: str):
     """Translating RNA into Protein"""
-    seq = Parser(file).line()
-    print(ros.translate(seq))
+    print(Parser(file).rna().translate())
 
 
 @app.command("subs")
@@ -424,12 +423,12 @@ def edta(file: str):
     print(out["dist"], out["a1"], out["a2"], sep="\n")
 
 
-@app.command("trie")
-def trie(file: str):
-    """Introduction to Pattern Matching"""
-    seqs = Parser(file).lines()
-    for line in graph.trie(seqs):
-        print(*line)
+# @app.command("trie")
+# def trie(file: str):
+#     """Introduction to Pattern Matching"""
+#     seqs = Parser(file).lines()
+#     for line in graph.trie(seqs):
+#         print(*line)
 
 
 def main():
