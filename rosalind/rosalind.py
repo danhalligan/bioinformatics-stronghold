@@ -3,7 +3,6 @@ import numpy as np
 import requests as r
 
 from rosalind.helpers import read_fasta, Dna
-from math import comb
 from io import StringIO
 
 
@@ -11,12 +10,6 @@ def max_gc(seqs):
     gc = [Dna(rec.seq).gc_content() for rec in seqs]
     m = gc.index(max(gc))
     return {"name": seqs[m].id, "value": round(gc[m] * 100, 5)}
-
-
-def mendel1(k, m, n):
-    tot = comb(k + m + n, 2)
-    poss = comb(k, 2) + k * m + k * n + m * n / 2 + comb(m, 2) * 3 / 4
-    return poss / tot
 
 
 def find_motif(seq1, seq2):
@@ -59,16 +52,6 @@ def find_shared_motif(seqs):
                     maxsub = s0[i:j]
 
     return maxsub
-
-
-def mendel2(k, n):
-    def dbinom(x, size, prob):
-        return comb(size, x) * prob ** x * (1 - prob) ** (size - x)
-
-    def pbinom(q, size, prob):
-        return sum([dbinom(x, size, prob) for x in range(0, q + 1)])
-
-    return 1 - pbinom(n - 1, 2 ** k, 0.25)
 
 
 def uniprot_output(id):

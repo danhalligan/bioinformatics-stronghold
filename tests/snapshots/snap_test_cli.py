@@ -46,11 +46,16 @@ PRET-TY
 PRTTEIN
 '''
 
+snapshots['test_cli_function[eval] 1'] = '''0.422 0.562 0.422
+'''
+
 snapshots['test_cli_function[fib] 1'] = '''19
 '''
 
 snapshots['test_cli_function[fibd] 1'] = '''4
 '''
+
+snapshots['test_cli_function[foun] 1'] = ''
 
 snapshots['test_cli_function[gc] 1'] = '''Rosalind_0808
 60.91954
@@ -65,6 +70,9 @@ snapshots['test_cli_function[hamm] 1'] = '''7
 '''
 
 snapshots['test_cli_function[iev] 1'] = '''3.5
+'''
+
+snapshots['test_cli_function[indc] 1'] = '''-0.0 -0.005 -0.024 -0.082 -0.205 -0.424 -0.765 -1.262 -1.969 -3.01
 '''
 
 snapshots['test_cli_function[inod] 1'] = '''2
@@ -209,15 +217,4 @@ snapshots['test_cli_function[tran] 1'] = '''1.2142857142857142
 '''
 
 snapshots['test_cli_function[tree] 1'] = '''3
-'''
-
-snapshots['test_cli_function[trie] 1'] = '''1 2 A
-2 3 T
-3 4 A
-4 5 G
-5 6 A
-3 7 C
-1 8 G
-8 9 A
-9 10 T
 '''

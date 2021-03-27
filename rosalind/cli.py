@@ -6,6 +6,7 @@ import rosalind.assembly as assembly
 import rosalind.alignment as aln
 import rosalind.combinatorics as com
 import rosalind.graph as graph
+import rosalind.probability as pr
 
 from rosalind.helpers import Parser
 from itertools import permutations, product
@@ -57,7 +58,7 @@ def hamm(file: str):
 def iprb(file: str):
     """Mendel's First Law"""
     k, m, n = Parser(file).ints()
-    print(ros.mendel1(k, m, n))
+    print(pr.iprb(k, m, n))
 
 
 @app.command("prot")
@@ -104,7 +105,7 @@ def grph(file: str):
 def iev(file: str):
     """Calculating Expected Offspring"""
     v = Parser(file).ints()
-    print(ros.expected_offspring(v))
+    print(pr.expected_offspring(v))
 
 
 @app.command("lcsm")
@@ -118,7 +119,7 @@ def lcsm(file: str):
 def lia(file: str):
     """Independent Alleles"""
     k, n = Parser(file).ints()
-    print(ros.mendel2(k, n))
+    print(pr.mendel2(k, n))
 
 
 @app.command("mprt")
@@ -421,6 +422,28 @@ def edta(file: str):
     seqs = Parser(file).seqs()
     out = aln.edta(seqs[0], seqs[1])
     print(out["dist"], out["a1"], out["a2"], sep="\n")
+
+
+@app.command("eval")
+def eval(file: str):
+    """Expected Number of Restriction Sites"""
+    n, s, a = Parser(file).lines()
+    n = int(n)
+    a = map(float, a.split())
+    print(*[round(pr.eval(n, s, x), 3) for x in a])
+
+
+@app.command("indc")
+def indc(file: str):
+    """Independent Segregation of Chromosomes"""
+    n = Parser(file).ints()[0]
+    print(*pr.indc(n))
+
+
+@app.command("foun")
+def foun(file: str):
+    """The Founder Effect and Genetic Drift"""
+    return None
 
 
 # @app.command("trie")
