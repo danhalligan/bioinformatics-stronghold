@@ -36,8 +36,7 @@ def revc(file: str):
 @app.command("fib")
 def fib(file: str):
     """Rabbits and Recurrence Relations"""
-    n, k = Parser(file).ints()
-    print(com.fib(n, k))
+    print(com.fib(*Parser(file).ints()))
 
 
 @app.command("gc")
@@ -50,15 +49,13 @@ def gc(file: str):
 @app.command("hamm")
 def hamm(file: str):
     """Counting Point Mutations"""
-    s1, s2 = Parser(file).lines()
-    print(aln.hamm(s1, s2))
+    print(aln.hamm(*Parser(file).lines()))
 
 
 @app.command("iprb")
 def iprb(file: str):
     """Mendel's First Law"""
-    k, m, n = Parser(file).ints()
-    print(pr.iprb(k, m, n))
+    print(pr.iprb(*Parser(file).ints()))
 
 
 @app.command("prot")
@@ -79,8 +76,7 @@ def cons(file: str):
     """Consensus and Profile"""
     x = Parser(file).seqs()
     mat = ros.profile_matrix(x)
-    cons = ros.consensus_sequence(mat)
-    print(cons)
+    print(ros.consensus_sequence(mat))
     for i in range(0, 4):
         print("ACGT"[i] + ":", *mat[i])
 
@@ -88,8 +84,7 @@ def cons(file: str):
 @app.command("fibd")
 def fibd(file: str):
     """Mortal Fibonacci Rabbits"""
-    n, m = Parser(file).ints()
-    print(com.fibd(n, m))
+    print(com.fibd(*Parser(file).ints()))
 
 
 @app.command("grph")
@@ -104,22 +99,19 @@ def grph(file: str):
 @app.command("iev")
 def iev(file: str):
     """Calculating Expected Offspring"""
-    v = Parser(file).ints()
-    print(pr.expected_offspring(v))
+    print(pr.iev(Parser(file).ints()))
 
 
 @app.command("lcsm")
 def lcsm(file: str):
     """Finding a Shared Motif"""
-    seqs = Parser(file).seqs()
-    print(ros.find_shared_motif(seqs))
+    print(ros.lcsm(Parser(file).seqs()))
 
 
 @app.command("lia")
 def lia(file: str):
     """Independent Alleles"""
-    k, n = Parser(file).ints()
-    print(pr.mendel2(k, n))
+    print(pr.lia(*Parser(file).ints()))
 
 
 @app.command("mprt")
@@ -227,14 +219,9 @@ def pper(file: str):
 @app.command("prob")
 def prob(file: str):
     """Introduction to Random Strings"""
-
-    def logp(c, p):
-        return math.log10({"G": p, "C": p, "A": 1 - p, "T": 1 - p}[c] / 2)
-
     seq, arr = Parser(file).lines()
-    arr = [float(x) for x in arr.split(" ")]
-    res = [round(sum([logp(c, p) for c in seq]), 3) for p in arr]
-    print(*res)
+    arr = [float(x) for x in arr.split()]
+    print(*pr.prob(seq, arr))
 
 
 @app.command("sign")
@@ -365,15 +352,13 @@ def aspc(file: str):
 @app.command("cat")
 def cat(file: str):
     """Catalan Numbers and RNA Secondary Structures"""
-    seq = Parser(file).seqs()[0]
-    print(com.cat(seq))
+    print(com.cat(*Parser(file).seqs()))
 
 
 @app.command("inod")
 def inod(file: str):
     """Counting Phylogenetic Ancestors"""
-    n = Parser(file).ints()[0]
-    print(n - 2)
+    print(Parser(file).ints()[0] - 2)
 
 
 @app.command("mmch")
@@ -385,8 +370,7 @@ def mmch(file: str):
 @app.command("afrq")
 def afrq(file: str):
     """Counting Disease Carriers"""
-    a = Parser(file).floats()
-    b = [2 * math.sqrt(x) * (1 - math.sqrt(x)) + x for x in a]
+    b = pr.afrq(Parser(file).floats())
     print(*[round(x, 3) for x in b])
 
 
@@ -436,14 +420,20 @@ def eval(file: str):
 @app.command("indc")
 def indc(file: str):
     """Independent Segregation of Chromosomes"""
-    n = Parser(file).ints()[0]
-    print(*pr.indc(n))
+    print(*pr.indc(*Parser(file).ints()))
 
 
 @app.command("foun")
 def foun(file: str):
     """The Founder Effect and Genetic Drift"""
     return None
+
+
+@app.command("sexl")
+def sexl(file: str):
+    """Sex-Linked Inheritance"""
+    arr = Parser(file).floats()
+    print(*[round(2 * v * (1 - v), 3) for v in arr])
 
 
 # @app.command("trie")

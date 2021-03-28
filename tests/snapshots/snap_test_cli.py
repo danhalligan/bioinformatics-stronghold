@@ -187,6 +187,9 @@ snapshots['test_cli_function[rna] 1'] = '''GAUGGAACUUGACUACGUAAAUU
 snapshots['test_cli_function[rstr] 1'] = '''0.6885137241525929
 '''
 
+snapshots['test_cli_function[sexl] 1'] = '''0.18 0.5 0.32
+'''
+
 snapshots['test_cli_function[sign] 1'] = '''8
 -1 -2
 -1 2

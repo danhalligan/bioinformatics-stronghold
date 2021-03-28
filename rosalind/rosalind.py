@@ -36,7 +36,7 @@ def expected_offspring(v):
     return sum([x[0] * x[1] * 2 for x in zip(v, p)])
 
 
-def find_shared_motif(seqs):
+def lcsm(seqs):
     seqs = sorted(seqs, key=len)
 
     maxsub = ""
