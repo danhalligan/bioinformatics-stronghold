@@ -221,3 +221,6 @@ snapshots['test_cli_function[tran] 1'] = '''1.2142857142857142
 
 snapshots['test_cli_function[tree] 1'] = '''3
 '''
+
+snapshots['test_cli_function[wfmd] 1'] = '''0.7717915965477005
+'''

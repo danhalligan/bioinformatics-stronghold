@@ -436,6 +436,12 @@ def sexl(file: str):
     print(*[round(2 * v * (1 - v), 3) for v in arr])
 
 
+@app.command("wfmd")
+def wfmd(file: str):
+    """The Wright-Fisher Model of Genetic Drift"""
+    print(pr.wfmd(*Parser(file).ints()))
+
+
 # @app.command("trie")
 # def trie(file: str):
 #     """Introduction to Pattern Matching"""
