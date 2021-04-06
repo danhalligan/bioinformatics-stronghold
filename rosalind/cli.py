@@ -1,5 +1,6 @@
 import typer
 import math
+import builtins
 import rosalind.rosalind as ros
 import rosalind.mass as mass
 import rosalind.assembly as assembly
@@ -326,6 +327,17 @@ def sset(file: str):
     print(2 ** n % 1000000)
 
 
+@app.command("seto")
+def seto(file: str):
+    """Introduction to Set Operations"""
+    n, s1, s2 = Parser(file).lines()
+    n = int(n)
+    s1 = builtins.eval(s1)
+    s2 = builtins.eval(s2)
+    s3 = set(range(1, n + 1))
+    print(*[s1 | s2, s1 & s2, s1 - s2, s2 - s1, s3 - s1, s3 - s2], sep="\n")
+
+
 @app.command("spec")
 def spec(file: str):
     """Inferring Protein from Spectrum"""
@@ -455,6 +467,19 @@ def lcsq(file: str):
 def motz(file: str):
     """Motzkin Numbers and RNA Secondary Structures"""
     print(com.motz(Parser(file).seqs()[0]))
+
+
+@app.command("pmch")
+def pmch(file: str):
+    """Perfect Matchings and RNA Secondary Structures"""
+    print(com.pmch(Parser(file).seqs()[0]))
+
+
+@app.command("lexv")
+def lexv(file: str):
+    """Ordering Strings of Varying Length Lexicographically"""
+    l1, l2 = Parser(file).lines()
+    print(*ros.lexv(l1.split(), int(l2)), sep="\n")
 
 
 # @app.command("trie")

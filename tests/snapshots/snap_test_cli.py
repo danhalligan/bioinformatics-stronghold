@@ -114,6 +114,47 @@ TG
 TT
 '''
 
+snapshots['test_cli_function[lexv] 1'] = '''D
+DD
+DDD
+DDN
+DDA
+DN
+DND
+DNN
+DNA
+DA
+DAD
+DAN
+DAA
+N
+ND
+NDD
+NDN
+NDA
+NN
+NND
+NNN
+NNA
+NA
+NAD
+NAN
+NAA
+A
+AD
+ADD
+ADN
+ADA
+AN
+AND
+ANN
+ANA
+AA
+AAD
+AAN
+AAA
+'''
+
 snapshots['test_cli_function[lgis] 1'] = '''1 2 3
 5 4 2
 '''
@@ -162,6 +203,9 @@ snapshots['test_cli_function[perm] 1'] = '''6
 3 2 1
 '''
 
+snapshots['test_cli_function[pmch] 1'] = '''12
+'''
+
 snapshots['test_cli_function[pper] 1'] = '''51200
 '''
 
@@ -194,6 +238,14 @@ snapshots['test_cli_function[rna] 1'] = '''GAUGGAACUUGACUACGUAAAUU
 '''
 
 snapshots['test_cli_function[rstr] 1'] = '''0.6885137241525929
+'''
+
+snapshots['test_cli_function[seto] 1'] = '''{1, 2, 3, 4, 5, 8, 10}
+{2, 5}
+{1, 3, 4}
+{8, 10}
+{6, 7, 8, 9, 10}
+{1, 3, 4, 6, 7, 9}
 '''
 
 snapshots['test_cli_function[sexl] 1'] = '''0.18 0.5 0.32

@@ -4,6 +4,7 @@ import requests as r
 
 from rosalind.helpers import read_fasta, Dna
 from io import StringIO
+from itertools import product
 
 
 def max_gc(seqs):
@@ -144,3 +145,11 @@ def lcsq(s1, s2):
         j, i = p[j, i]
 
     return subs[::-1]
+
+
+def lexv(s, n):
+    s = ["_"] + s
+    perm = list(product(s, repeat=n))
+    perm = ["".join(x) for x in perm]
+    perm = [re.sub("_+$", "", x) for x in perm]
+    return list(filter(lambda x: "_" not in x, perm[1:]))
