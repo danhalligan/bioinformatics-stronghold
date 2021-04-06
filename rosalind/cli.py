@@ -192,10 +192,10 @@ def lgis(file: str):
     """Longest Increasing Subsequence"""
     data = Parser(file).lines()[1]
     data = [int(x) for x in data.split(" ")]
-    s1 = ros.lis(data)
+    s1 = ros.lgis(data)
     print(*s1)
 
-    s2 = ros.lis([-x for x in data])
+    s2 = ros.lgis([-x for x in data])
     s2 = [-x for x in s2]
     print(*s2)
 
@@ -443,6 +443,12 @@ def sexl(file: str):
 def wfmd(file: str):
     """The Wright-Fisher Model of Genetic Drift"""
     print(pr.wfmd(*Parser(file).ints()))
+
+
+@app.command("lcsq")
+def lcsq(file: str):
+    """Locating Motifs Despite Introns"""
+    print(ros.lcsq(*Parser(file).seqs()))
 
 
 # @app.command("trie")
