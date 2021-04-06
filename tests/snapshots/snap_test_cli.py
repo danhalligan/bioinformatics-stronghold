@@ -55,9 +55,9 @@ snapshots['test_cli_function[fib] 1'] = '''19
 snapshots['test_cli_function[fibd] 1'] = '''4
 '''
 
-snapshots['test_cli_function[foun] 1'] = '''0.0 -0.46393557582149403 -0.9995098928663996
-0.0 -0.3014249988911509 -0.6416683673421397
-0.0 -0.22906669800784632 -0.485798552455789
+snapshots['test_cli_function[foun] 1'] = '''0.0 -0.46393558 -0.99950989
+0.0 -0.301425 -0.64166837
+0.0 -0.2290667 -0.48579855
 '''
 
 snapshots['test_cli_function[gc] 1'] = '''Rosalind_0808

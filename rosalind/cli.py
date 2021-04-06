@@ -441,7 +441,7 @@ def foun(file: str):
     n, m = [int(x) for x in l1.split()]
     a = [int(x) for x in l2.split()]
     for x in pr.foun(n, m, a):
-        print(*x)
+        print(*[round(f, 8) for f in x])
 
 
 @app.command("sexl")
