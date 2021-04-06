@@ -65,3 +65,8 @@ def wf_model(n, m, g):
 def wfmd(n, m, g, k):
     p = wf_model(2 * n, m, g)
     return sum(p[:-k])
+
+
+def foun(n, m, a):
+    for g in range(1, m + 1):
+        yield [log10(wf_model(2 * n, i, g)[0]) for i in a]

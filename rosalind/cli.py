@@ -91,8 +91,7 @@ def fibd(file: str):
 def grph(file: str):
     """Overlap Graphs"""
     fa = Parser(file).fastas()
-    out = list(graph.overlap_graph(fa))
-    for i in out:
+    for i in graph.overlap_graph(fa):
         print(*i)
 
 
@@ -426,7 +425,11 @@ def indc(file: str):
 @app.command("foun")
 def foun(file: str):
     """The Founder Effect and Genetic Drift"""
-    return None
+    l1, l2 = Parser(file).lines()
+    n, m = [int(x) for x in l1.split()]
+    a = [int(x) for x in l2.split()]
+    for x in pr.foun(n, m, a):
+        print(*x)
 
 
 @app.command("sexl")
