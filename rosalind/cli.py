@@ -451,6 +451,12 @@ def lcsq(file: str):
     print(ros.lcsq(*Parser(file).seqs()))
 
 
+@app.command("motz")
+def motz(file: str):
+    """Motzkin Numbers and RNA Secondary Structures"""
+    print(com.motz(Parser(file).seqs()[0]))
+
+
 # @app.command("trie")
 # def trie(file: str):
 #     """Introduction to Pattern Matching"""

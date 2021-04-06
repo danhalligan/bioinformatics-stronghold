@@ -127,6 +127,9 @@ snapshots['test_cli_function[long] 1'] = '''ATTAGACCTGCCGGAATAC
 snapshots['test_cli_function[mmch] 1'] = '''6
 '''
 
+snapshots['test_cli_function[motz] 1'] = '''7
+'''
+
 snapshots['test_cli_function[mprt] 1'] = '''B5ZC00
 85 118 142 306 395
 P07204_TRBM_HUMAN

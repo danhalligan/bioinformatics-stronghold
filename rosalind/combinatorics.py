@@ -127,3 +127,17 @@ def get_distance(s, t):
         c = min_breaks(c, t)
         nr += 1
     return nr
+
+
+@memoize
+def motz(seq):
+    if len(seq) in range(1):
+        return 1
+    else:
+        tot = motz(seq[1:])
+        tot += sum(
+            motz(seq[1:m]) * motz(seq[m + 1 :])
+            for m in range(1, len(seq))
+            if valid_pair(seq[0], seq[m])
+        )
+        return tot % 10 ** 6
