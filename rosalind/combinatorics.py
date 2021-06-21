@@ -84,7 +84,6 @@ def mmch(seq):
     return prod(au) * prod(gc)
 
 
-# based on https://medium.com/@matthewwestmk/87c62d690eef
 def flip(x, i, j):
     """Flip a section of a sequence"""
     rev = list.copy(x)

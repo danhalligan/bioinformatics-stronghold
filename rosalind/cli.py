@@ -162,7 +162,7 @@ def revp(file: str):
     seq = Parser(file).fastas()[0].seq
     res = sorted(ros.reverse_pallindromes(seq))
     for row in res:
-        print(*row, sep=" ")
+        print(*row)
 
 
 @app.command("splc")
@@ -185,7 +185,7 @@ def lexf(file: str):
     set = l1.split(" ")
     n = int(l2)
     perm = ["".join(x) for x in product(set, repeat=n)]
-    print("\n".join(sorted(perm)))
+    print(*sorted(perm), sep="\n")
 
 
 @app.command("lgis")

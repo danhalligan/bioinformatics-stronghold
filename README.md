@@ -34,6 +34,21 @@ pip3 install rosalind
 rosalind dna rosalind_dna.txt
 ```
 
+## Testing
+
+You can run tests using poetry. For example, to test a function with the test
+data, run something like:
+
+``` bash
+poetry run rosalind fib tests/data/test_fib.txt
+```
+
+To run all tests and calculate coverage run:
+
+``` bash
+poetry run pytest --cov rosalind
+```
+
 [Poetry]: https://python-poetry.org/
 [Typer]: https://typer.tiangolo.com/
 [pluralsight]: https://www.pluralsight.com/tech-blog/python-cli-utilities-with-poetry-and-typer/

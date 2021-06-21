@@ -4,7 +4,8 @@ import rosalind.alignment as aln
 
 
 # Fast find match using `find`
-# Find min_overlap prefix of s2 in s1, and store index to search for next match
+# Find overlap of at least min_overlap of prefix of s2 in s1
+# Stores an index to search for next match
 def find_overlap(s1, s2, min_overlap=None):
     ix = 1
     if min_overlap is None:
@@ -33,7 +34,7 @@ def construct_assembly(seqs):
                 ends[p2] = True
                 break
 
-    # Find starting key
+    # Find starting key using rmap
     k = list(seqs.keys())[0]
     while k in rmap:
         k = rmap[k]
