@@ -1,4 +1,4 @@
-# `rosalind`
+# rosalind
 
 Solutions to the Rosalind problems in python as a command line app. My solutions
 may be brute force :relaxed:
@@ -24,7 +24,6 @@ Some build details that I'm playing with while putting this together:
 You can install with pip:
 
 ```bash
-git clone https://gitlab.fiosgenomics.com/dan/rosalind rosalind
 pip3 install rosalind
 ```
 
