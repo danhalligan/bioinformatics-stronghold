@@ -240,9 +240,9 @@ def sseq(file: str):
 
     def matches(s1, s2):
         i, j = 0, 0
-        while i < len(s1) and j < len(s2):
+        while j < len(s2):
             if s2[j] == s1[i]:
-                yield (i + 1)
+                yield i + 1
                 j += 1
             i += 1
 
@@ -417,6 +417,14 @@ def edta(file: str):
     seqs = Parser(file).seqs()
     out = aln.edta(seqs[0], seqs[1])
     print(out["dist"], out["a1"], out["a2"], sep="\n")
+
+
+@app.command("scsp")
+def scsp(file: str):
+    """Edit Distance Alignment"""
+    seqs = Parser(file).lines()
+    out = aln.scsp(seqs[0], seqs[1])
+    print(out["ss"], sep="\n")
 
 
 @app.command("eval")

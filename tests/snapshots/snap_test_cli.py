@@ -240,6 +240,9 @@ snapshots['test_cli_function[rna] 1'] = '''GAUGGAACUUGACUACGUAAAUU
 snapshots['test_cli_function[rstr] 1'] = '''0.6885137241525929
 '''
 
+snapshots['test_cli_function[scsp] 1'] = '''ATGCATGAT
+'''
+
 snapshots['test_cli_function[seto] 1'] = '''{1, 2, 3, 4, 5, 8, 10}
 {2, 5}
 {1, 3, 4}
