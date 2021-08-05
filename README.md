@@ -1,9 +1,7 @@
 # rosalind
 
-Solutions to the Rosalind problems in python as a command line app. My solutions
-may be brute force :relaxed:
-
-<http://rosalind.info/problems/>
+Solutions to the [Rosalind problems](http://rosalind.info/problems/) in python
+as a command line app.
 
 I'm trying not to use Biopython (whilst also not attempting to rewrite this from
 scratch!)
