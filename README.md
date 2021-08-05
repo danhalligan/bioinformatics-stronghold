@@ -1,7 +1,6 @@
 # rosalind
 
-Solutions to the [Rosalind problems](http://rosalind.info/problems/) in python
-as a command line app.
+Solutions to the [Rosalind problems] in python as a command line app.
 
 I'm trying not to use Biopython (whilst also not attempting to rewrite this from
 scratch!)
@@ -46,6 +45,7 @@ To run all tests and calculate coverage run:
 poetry run pytest --cov rosalind
 ```
 
+[Rosalind problems]: http://rosalind.info/problems/
 [Poetry]: https://python-poetry.org/
 [Typer]: https://typer.tiangolo.com/
 [pluralsight]: https://www.pluralsight.com/tech-blog/python-cli-utilities-with-poetry-and-typer/
