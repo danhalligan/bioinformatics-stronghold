@@ -411,6 +411,14 @@ def edit(file: str):
     print(aln.edit(seqs[0], seqs[1]))
 
 
+@app.command("ctea")
+def ctea(file: str):
+    """Edit Distance Alignment"""
+    seqs = Parser(file).seqs()
+    out = aln.ctea(seqs[0], seqs[1])
+    print(out, sep="\n")
+
+
 @app.command("edta")
 def edta(file: str):
     """Edit Distance Alignment"""
@@ -468,7 +476,7 @@ def wfmd(file: str):
 @app.command("lcsq")
 def lcsq(file: str):
     """Locating Motifs Despite Introns"""
-    print(ros.lcsq(*Parser(file).seqs()))
+    print(aln.lcsq(*Parser(file).seqs()))
 
 
 @app.command("motz")

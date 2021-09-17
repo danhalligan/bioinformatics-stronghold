@@ -32,6 +32,9 @@ GAGGA->GATGA
 TTTCC->TTTCA
 '''
 
+snapshots['test_cli_function[ctea] 1'] = '''4
+'''
+
 snapshots['test_cli_function[dna] 1'] = '''20 12 17 21
 '''
 
