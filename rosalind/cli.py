@@ -415,8 +415,14 @@ def edit(file: str):
 def ctea(file: str):
     """Edit Distance Alignment"""
     seqs = Parser(file).seqs()
-    out = aln.ctea(seqs[0], seqs[1])
-    print(out, sep="\n")
+    print(aln.ctea(seqs[0], seqs[1]))
+
+
+@app.command("glob")
+def glob(file: str):
+    """Global Alignment with Scoring Matrix"""
+    seqs = Parser(file).seqs()
+    print(aln.glob(seqs[0], seqs[1]))
 
 
 @app.command("edta")

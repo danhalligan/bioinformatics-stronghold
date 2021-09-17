@@ -1,3 +1,6 @@
+from rosalind.helpers import blosum62
+
+
 def printm(m, s1, s2):
     """print alignment dict (for debugging)"""
     print(*"  " + s1)
@@ -74,13 +77,55 @@ def lcsq(s1, s2):
     return subs[::-1]
 
 
+def scsp(s1, s2):
+    """Interleaving Two Motifs"""
+
+    # We can calculate a shortest common supersequence by constructing a
+    # 2D matrix as before, but disallowing mismatches and with a special
+    # traceback.
+
+    # Initialise
+    m, p = {}, {}
+    for j in range(len(s2) + 1):
+        m[j, 0] = j
+        p[j, 0] = [j - 1, 0]
+
+    for i in range(len(s1) + 1):
+        m[0, i] = i
+        p[0, i] = [0, i - 1]
+
+    # fill matrices
+    for j in range(len(s2)):
+        for i in range(len(s1)):
+            if s1[i] == s2[j]:
+                m[j + 1, i + 1] = m[j, i]
+                p[j + 1, i + 1] = [j, i]
+            else:
+                opt = [m[j + 1, i], m[j, i + 1]]
+                m[j + 1, i + 1] = min(opt) + 1
+                p[j + 1, i + 1] = [[j + 1, i], [j, i + 1]][opt.index(min(opt))]
+
+    # traceback
+    ss = ""
+    i, j = len(s1), len(s2)
+    while i > 0 or j > 0:
+        if p[j, i] == [j - 1, i - 1]:
+            ss += s1[i - 1]
+        elif p[j, i] == [j, i - 1]:
+            ss += s1[i - 1]
+        elif p[j, i] == [j - 1, i]:
+            ss += s2[j - 1]
+        j, i = p[j, i]
+
+    return {"dist": m[len(s2), len(s1)], "ss": ss[::-1]}
+
+
 def edit(s1, s2):
     """Edit Distance"""
     # initialise
     m = {}
     for j in range(len(s2) + 1):
         m[j, 0] = j
-
     for i in range(len(s1) + 1):
         m[0, i] = i
 
@@ -161,44 +206,20 @@ def ctea(s1, s2):
     return routes[len(s2), len(s1)] % 134217727
 
 
-def scsp(s1, s2):
-    """Interleaving Two Motifs"""
-
-    # We can calculate a shortest common supersequence by constructing a
-    # 2D matrix as before, but disallowing mismatches and with a special
-    # traceback.
-
-    # Initialise
-    m, p = {}, {}
+def glob(s1, s2):
+    """Global Alignment with Scoring Matrix"""
+    b = blosum62()
+    score = {}
     for j in range(len(s2) + 1):
-        m[j, 0] = j
-        p[j, 0] = [j - 1, 0]
-
+        score[j, 0] = -5 * j
     for i in range(len(s1) + 1):
-        m[0, i] = i
-        p[0, i] = [0, i - 1]
+        score[0, i] = -5 * i
 
-    # fill matrices
     for j in range(len(s2)):
         for i in range(len(s1)):
-            if s1[i] == s2[j]:
-                m[j + 1, i + 1] = m[j, i]
-                p[j + 1, i + 1] = [j, i]
-            else:
-                opt = [m[j + 1, i], m[j, i + 1]]
-                m[j + 1, i + 1] = min(opt) + 1
-                p[j + 1, i + 1] = [[j + 1, i], [j, i + 1]][opt.index(min(opt))]
+            pos = [(j + 1, i), (j, i), (j, i + 1)]
+            cost = [-5, b[s1[i]][s2[j]], -5]
+            scores = [score[pos[x]] + cost[x] for x in range(3)]
+            score[j + 1, i + 1] = max(scores)
 
-    # traceback
-    ss = ""
-    i, j = len(s1), len(s2)
-    while i > 0 or j > 0:
-        if p[j, i] == [j - 1, i - 1]:
-            ss += s1[i - 1]
-        elif p[j, i] == [j, i - 1]:
-            ss += s1[i - 1]
-        elif p[j, i] == [j - 1, i]:
-            ss += s2[j - 1]
-        j, i = p[j, i]
-
-    return {"dist": m[len(s2), len(s1)], "ss": ss[::-1]}
+    return score[len(s2), len(s1)]

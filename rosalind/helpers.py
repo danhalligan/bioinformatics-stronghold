@@ -174,3 +174,9 @@ def memoize(f):
         return cache[args]
 
     return wrapper
+
+
+def blosum62():
+    lines = pr.resource_string(__name__, "data/blosum62.txt").decode().split("\n")
+    header = lines[0].split()
+    return dict([x[0], dict(zip(header, map(int, x.split()[1:])))] for x in lines[1:])
