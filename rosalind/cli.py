@@ -404,6 +404,14 @@ def ebin(file: str):
     print(*[round(x * n, 3) for x in s2])
 
 
+@app.command("scsp")
+def scsp(file: str):
+    """Interleaving Two Motifs"""
+    seqs = Parser(file).lines()
+    out = aln.scsp(seqs[0], seqs[1])
+    print(out["ss"], sep="\n")
+
+
 @app.command("edit")
 def edit(file: str):
     """Edit Distance"""
@@ -411,9 +419,17 @@ def edit(file: str):
     print(aln.edit(seqs[0], seqs[1]))
 
 
+@app.command("edta")
+def edta(file: str):
+    """Edit Distance Alignment"""
+    seqs = Parser(file).seqs()
+    out = aln.edta(seqs[0], seqs[1])
+    print(out["dist"], out["a1"], out["a2"], sep="\n")
+
+
 @app.command("ctea")
 def ctea(file: str):
-    """Edit Distance Alignment"""
+    """Counting Optimal Alignments"""
     seqs = Parser(file).seqs()
     print(aln.ctea(seqs[0], seqs[1]))
 
@@ -425,20 +441,18 @@ def glob(file: str):
     print(aln.glob(seqs[0], seqs[1]))
 
 
-@app.command("edta")
-def edta(file: str):
-    """Edit Distance Alignment"""
+@app.command("gcon")
+def gcon(file: str):
+    """Global Alignment with Constant Gap Penalty"""
     seqs = Parser(file).seqs()
-    out = aln.edta(seqs[0], seqs[1])
-    print(out["dist"], out["a1"], out["a2"], sep="\n")
+    print(aln.gaff(seqs[0], seqs[1]))
 
 
-@app.command("scsp")
-def scsp(file: str):
-    """Edit Distance Alignment"""
-    seqs = Parser(file).lines()
-    out = aln.scsp(seqs[0], seqs[1])
-    print(out["ss"], sep="\n")
+@app.command("gaff")
+def gaff(file: str):
+    """Global Alignment with Scoring Matrix and Affine Gap Penalty"""
+    seqs = Parser(file).seqs()
+    print(aln.gaff(seqs[0], seqs[1], -11, -1))
 
 
 @app.command("eval")

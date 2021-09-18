@@ -176,6 +176,7 @@ def memoize(f):
     return wrapper
 
 
+@memoize
 def blosum62():
     lines = pr.resource_string(__name__, "data/blosum62.txt").decode().split("\n")
     header = lines[0].split()

@@ -3,13 +3,18 @@ from rosalind.helpers import blosum62
 
 def printm(m, s1, s2):
     """print alignment dict (for debugging)"""
-    print(*"  " + s1)
+    print(" ", end="")
+    s1 = " " + s1
+    for i in range(len(s1)):
+        print("%(number)3s" % {"number": s1[i]}, end="")
+    print()
     s2 = " " + s2
     for j in range(len(s2)):
-        print(s2[j], end=" ")
-        for i in range(len(s1) + 1):
-            print(m[j, i], end=" ")
+        print(s2[j], end="")
+        for i in range(len(s1)):
+            print("%(number)3s" % {"number": m[j, i]}, end="")
         print()
+    print()
 
 
 def hamm(s1, s2):
@@ -206,20 +211,47 @@ def ctea(s1, s2):
     return routes[len(s2), len(s1)] % 134217727
 
 
-def glob(s1, s2):
+def glob(s1, s2, penalty=-5):
     """Global Alignment with Scoring Matrix"""
-    b = blosum62()
-    score = {}
+    score = blosum62()
+    m = {}
     for j in range(len(s2) + 1):
-        score[j, 0] = -5 * j
+        m[j, 0] = penalty * j
     for i in range(len(s1) + 1):
-        score[0, i] = -5 * i
+        m[0, i] = penalty * i
 
     for j in range(len(s2)):
         for i in range(len(s1)):
             pos = [(j + 1, i), (j, i), (j, i + 1)]
-            cost = [-5, b[s1[i]][s2[j]], -5]
-            scores = [score[pos[x]] + cost[x] for x in range(3)]
-            score[j + 1, i + 1] = max(scores)
+            cost = [penalty, score[s1[i]][s2[j]], penalty]
+            scores = [m[pos[x]] + cost[x] for x in range(3)]
+            m[j + 1, i + 1] = max(scores)
 
-    return score[len(s2), len(s1)]
+    return m[len(s2), len(s1)]
+
+
+def gaff(s1, s2, penalty=-5, extension=0):
+    """Global Alignment with Affine Gap Penalty"""
+    # See Biological Sequence Analysis page 29
+    # Its a simplification of the more general affine gap penalty
+    # with an extension penalty of 0.
+    # We now have to keep track of three matrices m, x and y
+
+    score = blosum62()
+    m, x, y = {}, {}, {}
+    for j in range(len(s2) + 1):
+        m[j, 0] = penalty + extension * j
+        y[j, 0] = -99
+    for i in range(len(s1) + 1):
+        m[0, i] = penalty + extension * i
+        x[0, i] = -99
+
+    m[0, 0] = 0
+    for j in range(len(s2)):
+        for i in range(len(s1)):
+            new = (j + 1, i + 1)
+            x[new] = max([m[j, i + 1] + penalty, x[j, i + 1] + extension])
+            y[new] = max([m[j + 1, i] + penalty, y[j + 1, i] + extension])
+            m[new] = max([m[j, i] + score[s1[i]][s2[j]], x[new], y[new]])
+
+    return m[len(s2), len(s1)]
