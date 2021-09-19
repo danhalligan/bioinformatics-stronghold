@@ -64,8 +64,8 @@ snapshots['test_cli_function[foun] 1'] = '''0.0 -0.46393558 -0.99950989
 '''
 
 snapshots['test_cli_function[gaff] 1'] = '''8
-PRT---EIIS
-PRTTWPEI-N
+PRT---EINS
+PRTWPSEIN-
 '''
 
 snapshots['test_cli_function[gc] 1'] = '''Rosalind_0808

@@ -20,7 +20,7 @@ def test_cli_function(capfd, snapshot, fun):
 
 
 def test_gaff(capfd, snapshot):
-    for i in range(1, 4):
+    for i in range(1, 5):
         out = cli.gaff(f"tests/data/test_gaff{i}.txt")
         out, err = capfd.readouterr()
         snapshot.assert_match(out)
