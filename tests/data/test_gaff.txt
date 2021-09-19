@@ -1,4 +1,5 @@
 >Rosalind_67
 PRTEINS
 >Rosalind_17
+
 PRTWPSEIN

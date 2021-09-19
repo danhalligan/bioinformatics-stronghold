@@ -6,13 +6,13 @@ def printm(m, s1, s2):
     print(" ", end="")
     s1 = " " + s1
     for i in range(len(s1)):
-        print("%(number)3s" % {"number": s1[i]}, end="")
+        print("%(number)4s" % {"number": s1[i]}, end="")
     print()
     s2 = " " + s2
     for j in range(len(s2)):
         print(s2[j], end="")
         for i in range(len(s1)):
-            print("%(number)3s" % {"number": m[j, i]}, end="")
+            print("%(number)4s" % {"number": m[j, i]}, end="")
         print()
     print()
 
@@ -230,8 +230,8 @@ def glob(s1, s2, penalty=-5):
     return m[len(s2), len(s1)]
 
 
-def gaff(s1, s2, penalty=-5, extension=0):
-    """Global Alignment with Affine Gap Penalty"""
+def gcon(s1, s2, penalty=-5):
+    """Global Alignment with Constant Gap Penalty"""
     # See Biological Sequence Analysis page 29
     # Its a simplification of the more general affine gap penalty
     # with an extension penalty of 0.
@@ -240,18 +240,243 @@ def gaff(s1, s2, penalty=-5, extension=0):
     score = blosum62()
     m, x, y = {}, {}, {}
     for j in range(len(s2) + 1):
-        m[j, 0] = penalty + extension * j
+        m[j, 0] = penalty
         y[j, 0] = -99
     for i in range(len(s1) + 1):
-        m[0, i] = penalty + extension * i
+        m[0, i] = penalty
         x[0, i] = -99
 
     m[0, 0] = 0
     for j in range(len(s2)):
         for i in range(len(s1)):
             new = (j + 1, i + 1)
-            x[new] = max([m[j, i + 1] + penalty, x[j, i + 1] + extension])
-            y[new] = max([m[j + 1, i] + penalty, y[j + 1, i] + extension])
+            x[new] = max([m[j, i + 1] + penalty, x[j, i + 1]])
+            y[new] = max([m[j + 1, i] + penalty, y[j + 1, i]])
             m[new] = max([m[j, i] + score[s1[i]][s2[j]], x[new], y[new]])
 
     return m[len(s2), len(s1)]
+
+
+# def gaff(s1, s2, penalty=-5, extension=0):
+#     """Global Alignment with Affine Gap Penalty"""
+#     # See Biological Sequence Analysis page 29
+#     # We now have to keep track of three matrices m, x and y
+#     score = blosum62()
+#     m, x, y = {}, {}, {}
+#     pm, px, py = {}, {}, {}
+
+#     for j in range(len(s2) + 1):
+#         m[j, 0] = penalty + extension * j
+#         y[j, 0] = -99
+#         pm[j, 0] = "↑"
+#         px[j, 0] = "↑"
+#         py[j, 0] = "↑"
+#     for i in range(len(s1) + 1):
+#         m[0, i] = penalty + extension * i
+#         x[0, i] = -99
+#         pm[0, i] = "←"
+#         px[0, i] = "←"
+#         py[0, i] = "←"
+
+#     m[0, 0] = 0
+#     for j in range(len(s2)):
+#         for i in range(len(s1)):
+#             new = (j + 1, i + 1)
+
+#             scores = [m[j, i + 1] + penalty, x[j, i + 1] + extension]
+#             x[new] = max(scores)
+#             px[new] = ["↖", "←"][scores.index(x[new])]
+
+#             scores = [m[j + 1, i] + penalty, y[j + 1, i] + extension]
+#             y[new] = max(scores)
+#             py[new] = ["↖", "↑"][scores.index(y[new])]
+
+#             scores = [m[j, i] + score[s1[i]][s2[j]], x[new], y[new]]
+#             m[new] = max(scores)
+#             pm[new] = ["↖", "↑", "←"][scores.index(m[new])]
+
+#     # traceback
+#     i, j = len(s1), len(s2)
+#     scores = [x[j, i], y[j, i], m[j, i]]
+#     best = max(scores)
+#     t = scores.index(best)
+#     a1, a2 = "", ""
+#     # p = [px, py, pm][scores.index(best)]
+
+#     while i > 0 or j > 0:
+#         print(i, j, t)
+#         if t == 0:
+#             if px[j, i] == "↖":
+#                 t = 2
+#             i -= 1
+#             a1 += s1[i - 1]
+#             a2 += "-"
+#         elif t == 1:
+#             if py[j, i] == "↖":
+#                 t = 2
+#             j -= 1
+#             a1 += "-"
+#             a2 += s2[j - 1]
+#         elif t == 2:
+#             if pm[j, i] == "←":
+#                 t = 0
+#             elif pm[j, i] == "↑":
+#                 t = 1
+#             else:
+#                 a1 += s1[i - 1]
+#                 a2 += s2[j - 1]
+#                 i -= 1
+#                 j -= 1
+
+#     return {"dist": best, "a1": a1[::-1], "a2": a2[::-1]}
+
+
+def gaff(s1, s2, penalty=-11, extension=-1):
+    """Global Alignment with Affine Gap Penalty"""
+    # See Biological Sequence Analysis page 29
+    # We now have to keep track of three matrices m, x and y
+    score = blosum62()
+    m, x, y = {}, {}, {}
+    pm, px, py = {}, {}, {}
+
+    m[0, 0] = 0
+    x[0, 0] = 0
+    y[0, 0] = 0
+    for i in range(1, len(s1) + 1):
+        x[i, 0] = penalty + (i - 1) * extension
+        m[i, 0] = penalty + (i - 1) * extension
+        y[i, 0] = -99
+    for j in range(1, len(s2) + 1):
+        y[0, j] = penalty + (j - 1) * extension
+        m[0, j] = penalty + (j - 1) * extension
+        x[0, j] = -99
+
+    for i in range(1, len(s1) + 1):
+        for j in range(1, len(s2) + 1):
+            scores = [m[i - 1, j] + penalty, x[i - 1, j] + extension]
+            x[i, j] = max(scores)
+            px[i, j] = ["↖", "←"][scores.index(x[i, j])]
+
+            scores = [m[i, j - 1] + penalty, y[i, j - 1] + extension]
+            y[i, j] = max(scores)
+            py[i, j] = ["↖", "↑"][scores.index(y[i, j])]
+
+            scores = [m[i - 1, j - 1] + score[s1[i - 1]][s2[j - 1]], x[i, j], y[i, j]]
+            m[i, j] = max(scores)
+            pm[i, j] = ["↖", "←", "↑"][scores.index(m[i, j])]
+
+    # printm(m, s2, s1)
+    # printm(x, s2, s1)
+    # printm(y, s2, s1)
+    i, j = len(s1), len(s2)
+    scores = [m[i, j], x[i, j], y[i, j]]
+    best = max(scores)
+    p = ["↖", "←", "↑"][scores.index(best)]
+    a1, a2 = "", ""
+    pm[0, 0] = 0
+
+    i, j = len(s1) - 1, len(s2) - 1
+    while i >= 0 or j >= 0:
+        if p == "←":
+            p = px[i, j]
+            i -= 1
+            a1 += s1[i]
+            a2 += "-"
+        elif p == "↖":
+            p = pm[i, j]
+            a1 += s1[i]
+            a2 += s2[j]
+            i -= 1
+            j -= 1
+        else:
+            p = py[i, j]
+            j -= 1
+            a1 += "-"
+            a2 += s2[j]
+
+    return {"dist": str(best), "a1": a1[::-1], "a2": a2[::-1]}
+
+
+# def gaff(s1, s2, penalty = -11, extension = -1):
+#     """Global Alignment with Affine Gap Penalty"""
+#     # See Biological Sequence Analysis page 29
+#     # We now have to keep track of three matrices m, x and y
+#     score = blosum62()
+#     m, x, y = {}, {}, {}
+#     pm, px, py = {}, {}, {}
+
+#     m[0, 0] = 0
+#     x[0, 0] = 0
+#     y[0, 0] = 0
+#     for i in range(1, len(s1)+1):
+#         x[i, 0] = penalty + (i-1)*extension
+#         m[i, 0] = penalty + (i-1)*extension
+#         y[i, 0] = -999
+#     for j in range(1, len(s2)+1):
+#         y[0, j] = penalty + (j-1)*extension
+#         m[0, j] = penalty + (j-1)*extension
+#         x[0, j] = -999
+
+#     for i in range(1, len(s1)+1):
+#         for j in range(1, len(s2)+1):
+#             scores = [m[i-1, j] + penalty, x[i-1, j] + extension]
+#             x[i, j] = max(scores)
+#             px[i, j] = ['↖', '←'][scores.index(x[i, j])]
+
+#             scores = [m[i, j-1] + penalty, y[i, j-1] + extension]
+#             y[i, j] = max(scores)
+#             py[i, j] = ['↖', '↑'][scores.index(y[i, j])]
+
+#             scores = [m[i-1, j-1] + score[s1[i-1]][s2[j-1]], y[i, j], x[i, j]]
+#             m[i, j] = max(scores)
+#             pm[i, j] = ['↖', '↑', '←'][scores.index(m[i, j])]
+
+#     i, j = len(s1), len(s2)
+#     a1, a2 = s1, s2
+
+#     matrix_scores = [x[i, j], m[i, j], y[i, j]]
+#     max_score = max(matrix_scores)
+#     backtrack_matrix = matrix_scores.index(max_score)
+
+#     insert_indel = lambda word, i: word[:i] + '-' + word[i:]
+
+#     while i > 0 or j > 0:
+#         if backtrack_matrix == 0:
+#             if px[i, j] == '↖':
+#                 backtrack_matrix = 1
+#             i -= 1
+#             a2 = insert_indel(a2, j)
+#         elif backtrack_matrix == 1:
+#             if pm[i, j] == '←':
+#                 backtrack_matrix = 0
+#             elif pm[i, j] == '↑':
+#                 backtrack_matrix = 2
+#             else:
+#                 i -= 1
+#                 j -= 1
+#         else:
+#             if py[i, j] == '↖':
+#                 backtrack_matrix = 1
+#             j -= 1
+#             a1 = insert_indel(a1, i)
+
+#     return {"dist": str(max_score), "a1": a1, "a2": a2}
+
+
+# Correct answers
+
+# 348
+# EYNGPMSRGRIRQYWYKWFDVRHIHDFAYYSNIYFAGA----KAKQPFDWLSYDHCADLGWDDSNPSYEMVRYYGNGLNM
+# EYNGPMSRANIMQFWYKWFCEMHIHDFHYYSNIYFARADMNWKGAKAFDWNSYDHCADLGWDDSNPSYEMVRYYGNGLNM
+
+# 326
+# QVRPHADVNWMGVEPHMEYCFFTPWGIAYHRMSPASVQFLHAMRNFWASCGQSNIHEVMKMLACEHQCYLRHNLH--------CEM
+# QVRPHADVNWMGVEPHMEYLFFTPWGIAYHVGA--------SKRNFWASCGQSNIHEVMKMLACEHQCYLRHELKVHWVQADGCEM
+
+# 216
+# DQQAEEY----NEMITRKFQ--QREMAHPTMNCTEHMMMFTTCNQKHVPGNQVGSIIPTRKSFDKCVNSRPHCYHER-DGL
+# DQQAEQFIVQTEGMITGTFQFDHLEMAHPTMNCTTHMLSNLGLGQKVFYWLQVGSIIPTRKSFDKSVSSRPHCYHESYDGL
+
+# 307
+# FEAMNDVCPPINNCKHLFQPCEIYLPSPYDC--------DMKHHAHVYLKSWP-----------KHWPWAIYCVFDKRWLEHKFDDIMHHIHRCAFIERQCTSQLW
+# -EAMNDVCPPI--------PC-IYLPSPYDTETDVVPCQDMKHHAHVYLKSWQAARCFMKYSMIKHWPWFIFCVF-----ENKFDDIMHHIHRCAFGERQCTSQLW

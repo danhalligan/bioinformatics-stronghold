@@ -445,14 +445,17 @@ def glob(file: str):
 def gcon(file: str):
     """Global Alignment with Constant Gap Penalty"""
     seqs = Parser(file).seqs()
-    print(aln.gaff(seqs[0], seqs[1]))
+    print(aln.gcon(seqs[0], seqs[1]))
 
 
 @app.command("gaff")
 def gaff(file: str):
     """Global Alignment with Scoring Matrix and Affine Gap Penalty"""
     seqs = Parser(file).seqs()
-    print(aln.gaff(seqs[0], seqs[1], -11, -1))
+    res = aln.gaff(seqs[0], seqs[1], -11, -1)
+    print(res["dist"])
+    print(res["a1"])
+    print(res["a2"])
 
 
 @app.command("eval")
