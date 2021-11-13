@@ -35,6 +35,17 @@ TTTCC->TTTCA
 snapshots['test_cli_function[ctea] 1'] = '''4
 '''
 
+snapshots['test_cli_function[dbru] 1'] = '''(CAT, ATC)
+(ATC, TCA)
+(TGA, GAT)
+(TCA, CAT)
+(ATG, TGC)
+(ATG, TGA)
+(CAT, ATG)
+(GCA, CAT)
+(GAT, ATG)
+'''
+
 snapshots['test_cli_function[dna] 1'] = '''20 12 17 21
 '''
 
@@ -104,7 +115,7 @@ snapshots['test_cli_function[kmer] 1'] = '''4 1 4 3 0 1 1 5 1 3 1 2 2 1 2 0 1 1 
 snapshots['test_cli_function[kmp] 1'] = '''0 0 0 1 2 0 0 0 0 0 0 1 2 1 2 3 4 5 3 0 0
 '''
 
-snapshots['test_cli_function[lcsm] 1'] = '''AC
+snapshots['test_cli_function[lcsm] 1'] = '''TA
 '''
 
 snapshots['test_cli_function[lcsq] 1'] = '''AACTTG
@@ -200,6 +211,9 @@ snapshots['test_cli_function[orf] 1'] = '''M
 MGMTPRLGLESLLE
 MLLGSFRLIPKETLIQVAGSSPCNLS
 MTPRLGLESLLE
+'''
+
+snapshots['test_cli_function[pcov] 1'] = '''AATCTGT
 '''
 
 snapshots['test_cli_function[pdst] 1'] = '''0.0 0.4 0.1 0.1
