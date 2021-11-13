@@ -273,12 +273,6 @@ def corr(file: str):
     print(*assembly.find_errors(seqs), sep="\n")
 
 
-def kmer_perm(k):
-    set = ["A", "C", "G", "T"]
-    perm = list(product(set, repeat=k))
-    return ["".join(x) for x in perm]
-
-
 @app.command("kmer")
 def kmer(file: str):
     """k-Mer Composition"""
@@ -286,7 +280,7 @@ def kmer(file: str):
     seq = Parser(file).fastas()[0].seq
 
     # initialise hash with all possible 4-mers permutations
-    d = {k: 0 for k in kmer_perm(4)}
+    d = {k: 0 for k in ros.kmer_perm(4)}
 
     # Run through 4-mer slices of sequence and increment dictionary keys
     for i in range(len(seq) - 3):
@@ -298,7 +292,7 @@ def kmer(file: str):
 @app.command("dbru")
 def dbru(file: str):
     """Constructing a De Bruijn Graph"""
-    for pair in assembly.dbru(Parser(file).lines()):
+    for pair in sorted(assembly.dbru(Parser(file).lines())):
         print("(", pair[0], ", ", pair[1], ")", sep="")
 
 

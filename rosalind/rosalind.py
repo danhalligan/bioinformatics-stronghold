@@ -7,6 +7,12 @@ from io import StringIO
 from itertools import product
 
 
+def kmer_perm(k):
+    set = ["A", "C", "G", "T"]
+    perm = list(product(set, repeat=k))
+    return ["".join(x) for x in perm]
+
+
 def max_gc(seqs):
     gc = [Dna(rec.seq).gc_content() for rec in seqs]
     m = gc.index(max(gc))

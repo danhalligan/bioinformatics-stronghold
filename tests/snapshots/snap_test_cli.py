@@ -35,15 +35,15 @@ TTTCC->TTTCA
 snapshots['test_cli_function[ctea] 1'] = '''4
 '''
 
-snapshots['test_cli_function[dbru] 1'] = '''(CAT, ATC)
-(ATC, TCA)
-(TGA, GAT)
-(TCA, CAT)
-(ATG, TGC)
+snapshots['test_cli_function[dbru] 1'] = '''(ATC, TCA)
 (ATG, TGA)
+(ATG, TGC)
+(CAT, ATC)
 (CAT, ATG)
-(GCA, CAT)
 (GAT, ATG)
+(GCA, CAT)
+(TCA, CAT)
+(TGA, GAT)
 '''
 
 snapshots['test_cli_function[dna] 1'] = '''20 12 17 21
