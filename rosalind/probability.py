@@ -43,7 +43,7 @@ def eval(n, s, x):
 
 
 def indc(n):
-    res = [1 - pbinom(x, 2 * n, 0.5) for x in range(2 * n)]
+    res = [pbinom(2 * n - x, 2 * n, 0.5) for x in range(1, 2 * n + 1)]
     return [round(log10(x), 3) for x in res]
 
 
