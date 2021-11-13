@@ -65,3 +65,21 @@ def find_errors(seqs):
         for y in correct:
             if aln.hamm(x, y) == 1:
                 yield x + "->" + y
+
+
+def dbru(seqs):
+    seqs = set(seqs).union([Dna(seq).revc().seq for seq in seqs])
+    return [(x[:-1], x[1:]) for x in seqs]
+
+
+def pcov(seqs):
+    d = dict(dbru(seqs))
+    s = sorted(list(d.keys()))[0]
+    visited = set()
+    seq = ""
+    while s not in visited:
+        seq += s[0]
+        visited.add(s)
+        s = d[s]
+
+    return seq

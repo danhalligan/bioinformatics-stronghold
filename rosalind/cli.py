@@ -213,7 +213,7 @@ def long(file: str):
 def pper(file: str):
     """Partial Permutations"""
     n, k = Parser(file).ints()
-    print(reduce(lambda p, i: int((p * i) % 1e6), range(n, n - k, -1)))
+    print(reduce(lambda p, i: (p * i) % 1_000_000, range(n, n - k, -1)))
 
 
 @app.command("prob")
@@ -293,6 +293,19 @@ def kmer(file: str):
         d[seq[i : (i + 4)]] += 1
 
     print(*d.values())
+
+
+@app.command("dbru")
+def dbru(file: str):
+    """Constructing a De Bruijn Graph"""
+    for pair in assembly.dbru(Parser(file).lines()):
+        print("(", pair[0], ", ", pair[1], ")", sep="")
+
+
+@app.command("pcov")
+def pcov(file: str):
+    """Genome Assembly with Perfect Coverage"""
+    print(assembly.pcov(Parser(file).lines()))
 
 
 @app.command("kmp")

@@ -40,12 +40,9 @@ def lcsm(seqs):
     s = len(s0)
 
     for i in range(s):
-        for j in range(i + len(maxsub), s):
-            for seq in seqs:
-                if s0[i:j] not in seq:
-                    break
-                else:
-                    maxsub = s0[i:j]
+        for j in range(s - i + 1):
+            if j > len(maxsub) and all(s0[i : i + j] in x for x in seqs):
+                maxsub = s0[i : i + j]
 
     return maxsub
 
