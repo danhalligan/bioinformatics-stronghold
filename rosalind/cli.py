@@ -302,6 +302,12 @@ def pcov(file: str):
     print(assembly.pcov(Parser(file).lines()))
 
 
+@app.command("gasm")
+def gasm(file: str):
+    """Genome Assembly Using Reads"""
+    print(assembly.gasm(Parser(file).lines()))
+
+
 @app.command("kmp")
 def kmp(file: str):
     """Speeding Up Motif Finding"""

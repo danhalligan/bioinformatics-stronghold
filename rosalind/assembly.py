@@ -1,6 +1,7 @@
 from math import floor
 from rosalind.helpers import Dna
 import rosalind.alignment as aln
+from itertools import chain
 
 
 # Fast find match using `find`
@@ -68,18 +69,57 @@ def find_errors(seqs):
 
 
 def dbru(seqs):
+    seqs = list(seqs)
     seqs = set(seqs).union([Dna(seq).revc().seq for seq in seqs])
     return [(x[:-1], x[1:]) for x in seqs]
 
 
-def pcov(seqs):
-    d = dict(dbru(seqs))
-    s = sorted(list(d.keys()))[0]
+def find_cycle(graph):
+    s = sorted(list(graph.keys()))[0]
     visited = set()
-    seq = ""
+    cycle = []
     while s not in visited:
-        seq += s[0]
+        cycle += [s]
         visited.add(s)
-        s = d[s]
+        if s not in graph:
+            return None
+        s = graph[s]
+    return cycle
 
-    return seq
+
+def join_cycle(chain):
+    return "".join(x[0] for x in chain)
+
+
+def pcov(seqs):
+    x = find_cycle(dict(dbru(seqs)))
+    return join_cycle(sorted(x))
+
+
+# Return all kmers of length k from sequence seq
+def kmers(seq, k):
+    return [seq[i : (i + k)] for i in range(len(seq) - k + 1)]
+
+
+def extract_chain(graph):
+    ch1 = find_cycle(graph)
+    if ch1 is None:
+        return None, None
+    graph = dict(filter(lambda x: x[0] not in ch1, graph.items()))
+    return ch1, graph
+
+
+def gasm(seqs):
+    s0 = seqs[0][:-1]
+    for k in range(len(s0) + 1, 0, -1):
+        subseqs = chain(*[kmers(x, k) for x in seqs])
+        graph = dict(dbru(subseqs))
+        ch1, graph = extract_chain(graph)
+        if ch1 is None:
+            continue
+
+        ch2, graph = extract_chain(graph)
+        if ch2 is None:
+            continue
+        if len(graph) == 0:
+            return join_cycle(ch1)

@@ -79,6 +79,9 @@ PRT---EINS
 PRTWPSEIN-
 '''
 
+snapshots['test_cli_function[gasm] 1'] = '''AATCTGT
+'''
+
 snapshots['test_cli_function[gc] 1'] = '''Rosalind_0808
 60.91954
 '''
@@ -213,7 +216,7 @@ MLLGSFRLIPKETLIQVAGSSPCNLS
 MTPRLGLESLLE
 '''
 
-snapshots['test_cli_function[pcov] 1'] = '''AATCTGT
+snapshots['test_cli_function[pcov] 1'] = '''AACGTTT
 '''
 
 snapshots['test_cli_function[pdst] 1'] = '''0.0 0.4 0.1 0.1
