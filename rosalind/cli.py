@@ -308,6 +308,13 @@ def gasm(file: str):
     print(assembly.gasm(Parser(file).lines()))
 
 
+@app.command("asmq")
+def asmq(file: str):
+    """Assessing Assembly Quality with N50 and N75"""
+    seqs = Parser(file).lines()
+    print(assembly.asmq(seqs, 50), assembly.asmq(seqs, 75))
+
+
 @app.command("kmp")
 def kmp(file: str):
     """Speeding Up Motif Finding"""

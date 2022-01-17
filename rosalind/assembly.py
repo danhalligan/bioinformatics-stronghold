@@ -1,7 +1,6 @@
 from math import floor
 from rosalind.helpers import Dna
 import rosalind.alignment as aln
-from itertools import chain
 
 
 # Fast find match using `find`
@@ -112,7 +111,7 @@ def extract_chain(graph):
 def gasm(seqs):
     s0 = seqs[0][:-1]
     for k in range(len(s0) + 1, 0, -1):
-        subseqs = chain(*[kmers(x, k) for x in seqs])
+        subseqs = [i for x in seqs for i in kmers(x, k)]
         graph = dict(dbru(subseqs))
         ch1, graph = extract_chain(graph)
         if ch1 is None:
@@ -123,3 +122,13 @@ def gasm(seqs):
             continue
         if len(graph) == 0:
             return join_cycle(ch1)
+
+
+def asmq(seqs, n):
+    lens = sorted([len(x) for x in seqs], reverse=True)
+    tot = sum(lens)
+    cumsum = 0
+    for x in lens:
+        cumsum += x
+        if cumsum / tot > n / 100:
+            return x

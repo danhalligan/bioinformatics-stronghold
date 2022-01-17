@@ -10,6 +10,9 @@ snapshots = Snapshot()
 snapshots['test_cli_function[afrq] 1'] = '''0.532 0.75 0.914
 '''
 
+snapshots['test_cli_function[asmq] 1'] = '''7 6
+'''
+
 snapshots['test_cli_function[aspc] 1'] = '''42
 '''
 
