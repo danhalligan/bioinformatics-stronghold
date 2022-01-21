@@ -315,6 +315,14 @@ def asmq(file: str):
     print(assembly.asmq(seqs, 50), assembly.asmq(seqs, 75))
 
 
+@app.command("grep")
+def grep(file: str):
+    """Genome Assembly with Perfect Coverage and Repeats"""
+    seqs = Parser(file).lines()
+    res = sorted(assembly.grep(seqs))
+    print("\n".join(res))
+
+
 @app.command("kmp")
 def kmp(file: str):
     """Speeding Up Motif Finding"""

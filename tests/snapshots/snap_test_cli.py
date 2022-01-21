@@ -95,6 +95,14 @@ snapshots['test_cli_function[gcon] 1'] = '''13
 snapshots['test_cli_function[glob] 1'] = '''8
 '''
 
+snapshots['test_cli_function[grep] 1'] = '''CAGTTCAATTGGCGTTT
+CAGTTCAATTTGGCGTT
+CAGTTGGCGTTCAATTT
+CAGTTGGCGTTTCAATT
+CAGTTTCAATTGGCGTT
+CAGTTTGGCGTTCAATT
+'''
+
 snapshots['test_cli_function[grph] 1'] = '''Rosalind_0498 Rosalind_2391
 Rosalind_0498 Rosalind_0442
 Rosalind_2391 Rosalind_2323

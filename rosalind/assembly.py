@@ -1,6 +1,8 @@
 from math import floor
 from rosalind.helpers import Dna
 import rosalind.alignment as aln
+from collections import defaultdict
+from functools import cache
 
 
 # Fast find match using `find`
@@ -67,22 +69,23 @@ def find_errors(seqs):
                 yield x + "->" + y
 
 
-def dbru(seqs):
+def dbru(seqs, rev=True):
     seqs = list(seqs)
-    seqs = set(seqs).union([Dna(seq).revc().seq for seq in seqs])
+    if rev:
+        seqs = set(seqs).union([Dna(seq).revc().seq for seq in seqs])
     return [(x[:-1], x[1:]) for x in seqs]
 
 
 def find_cycle(graph):
-    s = sorted(list(graph.keys()))[0]
+    key = sorted(list(graph.keys()))[0]
     visited = set()
     cycle = []
-    while s not in visited:
-        cycle += [s]
-        visited.add(s)
-        if s not in graph:
+    while key not in visited:
+        cycle += [key]
+        visited.add(key)
+        if key not in graph:
             return None
-        s = graph[s]
+        key = graph[key]
     return cycle
 
 
@@ -132,3 +135,26 @@ def asmq(seqs, n):
         cumsum += x
         if cumsum / tot > n / 100:
             return x
+
+
+@cache
+def find_paths(db, key, assembly):
+    if len(db) == 0:
+        yield assembly[: -(len(key) + 1)]
+    else:
+        # build graph
+        graph = defaultdict(list)
+        for k, v in db:
+            graph[k] += [v]
+
+        # for possible next nodes
+        for x in graph[key]:
+            g = list(db)
+            g.remove((key, x))
+            yield from find_paths(tuple(g), x, assembly + x[-1])
+
+
+def grep(seqs):
+    db = tuple(dbru(seqs, rev=False))
+    res = set(find_paths(db, seqs[0][1:], seqs[0]))
+    return sorted(res)
