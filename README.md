@@ -1,5 +1,7 @@
 # rosalind
 
+![CI workflow](https://github.com/danhalligan/rosalind/actions/workflows/ci.yaml/badge.svg)
+
 Solutions to the [Rosalind problems] in python as a command line app.
 
 I'm trying not to use Biopython (whilst also not attempting to rewrite this from
