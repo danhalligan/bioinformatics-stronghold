@@ -15,6 +15,7 @@ Some build details that I'm playing with while putting this together:
   [black docs]
 - Coverage and coverage reports with [pytest-cov]
 - Snapshots of test output with [snapshottest]
+- GitHub CI based with [github actions]
 
 ## Install
 
@@ -57,3 +58,5 @@ poetry run pytest --cov rosalind
 [black docs]: https://black.readthedocs.io/en/stable/version_control_integration.html
 [pytest-cov]: https://pypi.org/project/pytest-cov/
 [snapshottest]: https://pypi.org/project/snapshottest/
+[github actions]: https://medium.com/@vanflymen/blazing-fast-ci-with-github-actions-poetry-black-and-pytest-9e74299dd4a5
+

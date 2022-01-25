@@ -1,7 +1,6 @@
 from math import floor
 from rosalind.helpers import Dna
 import rosalind.alignment as aln
-from collections import defaultdict
 from functools import cache
 
 
@@ -72,6 +71,7 @@ def find_errors(seqs):
 def dbru(seqs, rev=True):
     seqs = list(seqs)
     if rev:
+        # add reverse complement sequences
         seqs = set(seqs).union([Dna(seq).revc().seq for seq in seqs])
     return [(x[:-1], x[1:]) for x in seqs]
 
@@ -83,8 +83,6 @@ def find_cycle(graph):
     while key not in visited:
         cycle += [key]
         visited.add(key)
-        if key not in graph:
-            return None
         key = graph[key]
     return cycle
 
@@ -105,8 +103,6 @@ def kmers(seq, k):
 
 def extract_chain(graph):
     ch1 = find_cycle(graph)
-    if ch1 is None:
-        return None, None
     graph = dict(filter(lambda x: x[0] not in ch1, graph.items()))
     return ch1, graph
 
@@ -116,15 +112,13 @@ def gasm(seqs):
     for k in range(len(s0) + 1, 0, -1):
         subseqs = [i for x in seqs for i in kmers(x, k)]
         graph = dict(dbru(subseqs))
-        ch1, graph = extract_chain(graph)
-        if ch1 is None:
+        try:
+            ch1, graph = extract_chain(graph)
+            ch2, graph = extract_chain(graph)
+            if len(graph) == 0:
+                return join_cycle(ch1)
+        except KeyError:
             continue
-
-        ch2, graph = extract_chain(graph)
-        if ch2 is None:
-            continue
-        if len(graph) == 0:
-            return join_cycle(ch1)
 
 
 def asmq(seqs, n):
@@ -137,21 +131,21 @@ def asmq(seqs, n):
             return x
 
 
+def drop_edge(edges, edge):
+    g = list(edges)
+    g.remove(edge)
+    return tuple(g)
+
+
 @cache
-def find_paths(db, key, assembly):
-    if len(db) == 0:
+def find_paths(edges, key, assembly):
+    if len(edges) == 0:
         yield assembly[: -(len(key) + 1)]
     else:
-        # build graph
-        graph = defaultdict(list)
-        for k, v in db:
-            graph[k] += [v]
-
-        # for possible next nodes
-        for x in graph[key]:
-            g = list(db)
-            g.remove((key, x))
-            yield from find_paths(tuple(g), x, assembly + x[-1])
+        opts = [b for a, b in edges if a == key]
+        for nkey in opts:
+            new = drop_edge(edges, (key, nkey))
+            yield from find_paths(new, nkey, assembly + nkey[-1])
 
 
 def grep(seqs):
