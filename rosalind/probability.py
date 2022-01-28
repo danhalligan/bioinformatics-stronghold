@@ -48,7 +48,7 @@ def indc(n):
 
 
 def afrq(a):
-    return [2 * sqrt(x) * (1 - sqrt(x)) + x for x in a]
+    return [2 * sqrt(x) - x for x in a]
 
 
 def wf_model(n, m, g):
