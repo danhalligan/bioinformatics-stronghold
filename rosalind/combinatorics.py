@@ -78,10 +78,17 @@ def cat(seq, mod=1000000):
         return tot % mod
 
 
+def nPr(n, k):
+    """Returns the number of k-pernumatations of n."""
+    return factorial(n) // factorial(n - k)
+
+
+# There are nPr(max, min) edges for each AU, CG.
 def mmch(seq):
+    """Maximum Matchings and RNA Secondary Structures"""
     au = [seq.count(x) for x in "AU"]
     gc = [seq.count(x) for x in "GC"]
-    return prod(au) * prod(gc)
+    return nPr(max(au), min(au)) * nPr(max(gc), min(gc))
 
 
 def flip(x, i, j):
