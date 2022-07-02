@@ -423,6 +423,15 @@ def conv(file: str):
     print(res[1], res[0], sep="\n")
 
 
+@app.command("prsm")
+def prsm(file: str):
+    """Matching a Spectrum to a Protein"""
+    dat = Parser(file).lines()
+    n = int(dat[0])
+    res = mass.prsm(dat[1 : 1 + n], [float(x) for x in dat[1 + n :]])
+    print(*res, sep="\n")
+
+
 @app.command("ebin")
 def ebin(file: str):
     """Wright-Fisher's Expected Behavior"""
