@@ -64,22 +64,29 @@ def valid_pair(x, y):
     return x == pair[y]
 
 
+def wobble_pair(x, y):
+    pair = {"A": ["U"], "U": ["A", "G"], "C": "G", "G": ["C", "U"]}
+    return x in pair[y]
+
+
 @memoize
-def cat(seq, mod=1000000):
+def cat(seq, mod=10 ** 6):
     """Calculate total number of noncrossing perfect matchings"""
     if len(seq) in range(1):
         return 1
     else:
-        tot = sum(
-            cat(seq[1:m]) * cat(seq[m + 1 :])
-            for m in range(1, len(seq), 2)
-            if valid_pair(seq[0], seq[m])
+        return (
+            sum(
+                cat(seq[1:m]) * cat(seq[m + 1 :])
+                for m in range(1, len(seq), 2)
+                if valid_pair(seq[0], seq[m])
+            )
+            % mod
         )
-        return tot % mod
 
 
 def nPr(n, k):
-    """Returns the number of k-pernumatations of n."""
+    """Returns the number of k-permutations of n."""
     return factorial(n) // factorial(n - k)
 
 
@@ -136,14 +143,30 @@ def get_distance(s, t):
 
 
 @memoize
-def motz(seq):
+def motz(seq, mod=10 ** 6):
+    """Motzkin Numbers and RNA Secondary Structures"""
     if len(seq) in range(1):
         return 1
     else:
-        tot = motz(seq[1:])
-        tot += sum(
-            motz(seq[1:m]) * motz(seq[m + 1 :])
-            for m in range(1, len(seq))
-            if valid_pair(seq[0], seq[m])
+        return (
+            motz(seq[1:])
+            + sum(
+                motz(seq[1:m]) * motz(seq[m + 1 :])
+                for m in range(1, len(seq))
+                if valid_pair(seq[0], seq[m])
+            )
+            % mod
         )
-        return tot % 10 ** 6
+
+
+@memoize
+def rnas(seq):
+    """Wobble Bonding and RNA Secondary Structures"""
+    if len(seq) in range(1):
+        return 1
+    else:
+        return rnas(seq[1:]) + sum(
+            rnas(seq[1:m]) * rnas(seq[m + 1 :])
+            for m in range(4, len(seq))
+            if wobble_pair(seq[0], seq[m])
+        )

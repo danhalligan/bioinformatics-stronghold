@@ -536,6 +536,12 @@ def motz(file: str):
     print(com.motz(Parser(file).seqs()[0]))
 
 
+@app.command("rnas")
+def rnas(file: str):
+    """Wobble Bonding and RNA Secondary Structures"""
+    print(com.rnas(Parser(file).line()))
+
+
 @app.command("pmch")
 def pmch(file: str):
     """Perfect Matchings and RNA Secondary Structures"""

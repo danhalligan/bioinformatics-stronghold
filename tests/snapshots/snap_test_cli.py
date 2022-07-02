@@ -285,6 +285,9 @@ snapshots['test_cli_function[revp] 1'] = '''4 6
 snapshots['test_cli_function[rna] 1'] = '''GAUGGAACUUGACUACGUAAAUU
 '''
 
+snapshots['test_cli_function[rnas] 1'] = '''284850219977421
+'''
+
 snapshots['test_cli_function[rstr] 1'] = '''0.6885137241525929
 '''
 

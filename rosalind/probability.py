@@ -4,7 +4,7 @@ import numpy as np
 
 def dbinom(x, size, prob):
     """Binomial density"""
-    return comb(size, x) * prob ** x * (1 - prob) ** (size - x)
+    return comb(size, x) * prob ** x * (1.0 - prob) ** (size - x)
 
 
 def pbinom(q, size, prob):
