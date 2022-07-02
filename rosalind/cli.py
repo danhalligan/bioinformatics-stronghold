@@ -8,6 +8,7 @@ import rosalind.alignment as aln
 import rosalind.combinatorics as com
 import rosalind.graph as graph
 import rosalind.probability as pr
+import rosalind.sets as sets
 
 from rosalind.helpers import Parser
 from itertools import permutations, product
@@ -300,6 +301,12 @@ def dbru(file: str):
 def pcov(file: str):
     """Genome Assembly with Perfect Coverage"""
     print(assembly.pcov(Parser(file).lines()))
+
+
+@app.command("pdpl")
+def pdpl(file: str):
+    """Creating a Restriction Map"""
+    print(*sets.pdpl(Parser(file).ints()))
 
 
 @app.command("gasm")

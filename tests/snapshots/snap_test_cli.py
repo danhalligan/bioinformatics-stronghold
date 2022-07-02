@@ -230,6 +230,9 @@ MTPRLGLESLLE
 snapshots['test_cli_function[pcov] 1'] = '''AACGTTT
 '''
 
+snapshots['test_cli_function[pdpl] 1'] = '''0 2 4 7 10
+'''
+
 snapshots['test_cli_function[pdst] 1'] = '''0.0 0.4 0.1 0.1
 0.4 0.0 0.4 0.3
 0.1 0.4 0.0 0.2
