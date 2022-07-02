@@ -257,7 +257,8 @@ snapshots['test_cli_function[prob] 1'] = '''-5.737 -5.217 -5.263 -5.36 -5.958 -6
 snapshots['test_cli_function[prot] 1'] = '''MAMAPRTEINSTRING
 '''
 
-snapshots['test_cli_function[prsm] 1'] = '''[3, 'GSDMQS']
+snapshots['test_cli_function[prsm] 1'] = '''3
+GSDMQS
 '''
 
 snapshots['test_cli_function[prtm] 1'] = '''821.3919199999999
