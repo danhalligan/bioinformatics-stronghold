@@ -69,6 +69,7 @@ def find_errors(seqs):
 
 
 def dbru(seqs, rev=True):
+    """Constructing a De Bruijn Graph"""
     seqs = list(seqs)
     if rev:
         # add reverse complement sequences
@@ -92,6 +93,7 @@ def join_cycle(chain):
 
 
 def pcov(seqs):
+    """Genome Assembly with Perfect Coverage"""
     x = find_cycle(dict(dbru(seqs)))
     return join_cycle(sorted(x))
 
@@ -108,6 +110,7 @@ def extract_chain(graph):
 
 
 def gasm(seqs):
+    """Genome Assembly Using Reads"""
     s0 = seqs[0][:-1]
     for k in range(len(s0) + 1, 0, -1):
         subseqs = [i for x in seqs for i in kmers(x, k)]
@@ -122,6 +125,7 @@ def gasm(seqs):
 
 
 def asmq(seqs, n):
+    """Assessing Assembly Quality with N50 and N75"""
     lens = sorted([len(x) for x in seqs], reverse=True)
     tot = sum(lens)
     cumsum = 0
@@ -149,6 +153,7 @@ def find_paths(edges, key, assembly):
 
 
 def grep(seqs):
+    """Genome Assembly with Perfect Coverage and Repeats"""
     db = tuple(dbru(seqs, rev=False))
     res = set(find_paths(db, seqs[0][1:], seqs[0]))
     return sorted(res)

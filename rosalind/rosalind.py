@@ -39,6 +39,7 @@ def consensus_sequence(mat):
 
 
 def lcsm(seqs):
+    """Finding a Shared Motif"""
     seqs = sorted(seqs, key=len)
 
     maxsub = ""
@@ -118,6 +119,7 @@ def lgis(x):
 
 
 def lexv(s, n):
+    """Ordering Strings of Varying Length Lexicographically"""
     s = ["_"] + s
     perm = list(product(s, repeat=n))
     perm = ["".join(x) for x in perm]

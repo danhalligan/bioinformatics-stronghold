@@ -77,6 +77,10 @@ snapshots['test_cli_function[foun] 1'] = '''0.0 -0.46393558 -0.99950989
 0.0 -0.2290667 -0.48579855
 '''
 
+snapshots['test_cli_function[full] 1'] = '''KEKEP
+RPEKE
+'''
+
 snapshots['test_cli_function[gaff] 1'] = '''8
 PRT---EINS
 PRTWPSEIN-

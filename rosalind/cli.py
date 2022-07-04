@@ -381,6 +381,13 @@ def spec(file: str):
     print("".join([mass.match_mass(x) for x in diff]))
 
 
+@app.command("full")
+def full(file: str):
+    """Inferring Peptide from Full Spectrum"""
+    weights = [float(x) for x in Parser(file).lines()]
+    print(*mass.full(weights[0], weights[1:]), sep="\n")
+
+
 @app.command("pdst")
 def pdst(file: str):
     """Creating a Distance Matrix"""

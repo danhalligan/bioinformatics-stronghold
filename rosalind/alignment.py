@@ -50,6 +50,7 @@ def pdst(seqs):
 
 
 def lcsq(s1, s2):
+    """Finding a Shared Spliced Motif"""
     # initialise
     m, p = {}, {}
     for j in range(len(s2) + 1):
