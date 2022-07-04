@@ -65,15 +65,28 @@ def full(peptide, ions):
 
     def infer_peptide(w, seq, rm):
         for w2, aa in graph[w]:
-            if w2 in rm or w2 < w:
+            if w2 in rm:
                 continue
             if len(seq) + 1 == target_len:
                 yield seq + aa
             else:
-                yield from infer_peptide(w2, seq + aa, rm + [w2, pairs[w2]])
+                yield from infer_peptide(w2, seq + aa, rm + [w, pairs[w]])
 
     graph = weight_graph(ions)
     pairs = find_pairs(peptide, ions)
     target_len = int(len(ions) / 2 - 1)
     w = min(ions)
     return list(infer_peptide(w, "", [w, pairs[w]]))
+
+
+def sgra(ions):
+    """Using the Spectrum Graph to Infer Peptides"""
+
+    def infer_peptide(w, seq):
+        for w2, aa in graph[w]:
+            yield from infer_peptide(w2, seq + aa)
+        yield seq
+
+    graph = weight_graph(ions)
+    w = min(ions)
+    return max(list(infer_peptide(w, "")), key=len)

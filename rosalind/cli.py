@@ -388,6 +388,13 @@ def full(file: str):
     print(*mass.full(weights[0], weights[1:]), sep="\n")
 
 
+@app.command("sgra")
+def sgra(file: str):
+    """Using the Spectrum Graph to Infer Peptides"""
+    weights = [float(x) for x in Parser(file).lines()]
+    print(mass.sgra(weights), sep="\n")
+
+
 @app.command("pdst")
 def pdst(file: str):
     """Creating a Distance Matrix"""

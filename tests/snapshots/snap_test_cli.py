@@ -310,6 +310,9 @@ snapshots['test_cli_function[seto] 1'] = '''{1, 2, 3, 4, 5, 8, 10}
 snapshots['test_cli_function[sexl] 1'] = '''0.18 0.5 0.32
 '''
 
+snapshots['test_cli_function[sgra] 1'] = '''WMSPG
+'''
+
 snapshots['test_cli_function[sign] 1'] = '''8
 -1 -2
 -1 2
