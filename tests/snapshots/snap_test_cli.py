@@ -208,6 +208,9 @@ snapshots['test_cli_function[lia] 1'] = '''0.68359375
 snapshots['test_cli_function[long] 1'] = '''ATTAGACCTGCCGGAATAC
 '''
 
+snapshots['test_cli_function[mgap] 1'] = '''3
+'''
+
 snapshots['test_cli_function[mmch] 1'] = '''6
 '''
 

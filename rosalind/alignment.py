@@ -1,4 +1,5 @@
 from rosalind.helpers import blosum62
+from collections import defaultdict
 
 
 def printm(m, s1, s2):
@@ -210,6 +211,20 @@ def ctea(s1, s2):
             routes[new] = sum(routes[pos[x]] for x in range(3) if scores[x] == best)
 
     return routes[len(s2), len(s1)] % 134217727
+
+
+def mgap(s1, s2):
+    """Maximizing the Gap Symbols of an Optimal Alignment"""
+    m = defaultdict(lambda: 0)
+
+    for j in range(len(s2)):
+        for i in range(len(s1)):
+            if s1[i] == s2[j]:
+                m[j + 1, i + 1] = m[j, i] + 1
+            else:
+                m[j + 1, i + 1] = max([m[j + 1, i], m[j, i + 1]])
+
+    return len(s1) + len(s2) - 2 * m[len(s2), len(s1)]
 
 
 def glob(s1, s2, penalty=-5):

@@ -492,6 +492,13 @@ def ctea(file: str):
     print(aln.ctea(seqs[0], seqs[1]))
 
 
+@app.command("mgap")
+def mgap(file: str):
+    """Maximizing the Gap Symbols of an Optimal Alignment"""
+    seqs = Parser(file).seqs()
+    print(aln.mgap(seqs[0], seqs[1]))
+
+
 @app.command("glob")
 def glob(file: str):
     """Global Alignment with Scoring Matrix"""
