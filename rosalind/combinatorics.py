@@ -65,7 +65,7 @@ def valid_pair(x, y):
 
 
 def wobble_pair(x, y):
-    pair = {"A": ["U"], "U": ["A", "G"], "C": "G", "G": ["C", "U"]}
+    pair = {"A": "U", "U": "AG", "C": "G", "G": "CU"}
     return x in pair[y]
 
 

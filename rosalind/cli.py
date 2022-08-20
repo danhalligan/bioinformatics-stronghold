@@ -10,7 +10,7 @@ import rosalind.graph as graph
 import rosalind.probability as pr
 import rosalind.sets as sets
 
-from rosalind.helpers import Parser
+from rosalind.helpers import Parser, blosum62, pam250
 from itertools import permutations, product
 from functools import reduce
 
@@ -503,24 +503,58 @@ def mgap(file: str):
 def glob(file: str):
     """Global Alignment with Scoring Matrix"""
     seqs = Parser(file).seqs()
-    print(aln.glob(seqs[0], seqs[1]))
+    print(aln.glob(seqs[0], seqs[1], blosum62(), -5))
 
 
 @app.command("gcon")
 def gcon(file: str):
     """Global Alignment with Constant Gap Penalty"""
     seqs = Parser(file).seqs()
-    print(aln.gcon(seqs[0], seqs[1]))
+    print(aln.gcon(seqs[0], seqs[1], blosum62(), -5))
 
 
 @app.command("gaff")
 def gaff(file: str):
     """Global Alignment with Scoring Matrix and Affine Gap Penalty"""
     seqs = Parser(file).seqs()
-    res = aln.gaff(seqs[0], seqs[1], -11, -1)
+    res = aln.gaff(seqs[0], seqs[1], blosum62(), -11, -1)
     print(res["dist"])
     print(res["a1"])
     print(res["a2"])
+
+
+@app.command("loca")
+def loca(file: str):
+    """Local Alignment with Scoring Matrix"""
+    seqs = Parser(file).seqs()
+    res = aln.loca(seqs[0], seqs[1], pam250(), -5)
+    print(res["dist"])
+    print(res["a1"])
+    print(res["a2"])
+
+
+@app.command("mult")
+def mult(file: str):
+    """Multiple Alignment"""
+    seqs = Parser(file).seqs()
+    res = aln.mult(seqs)
+    print(*res, sep="\n")
+
+
+@app.command("oap")
+def oap(file: str):
+    """Overlap Alignment"""
+    s1, s2 = Parser(file).seqs()
+    res = aln.oap(s1, s2, -2)
+    print(*res, sep="\n")
+
+
+@app.command("sims")
+def sims(file: str):
+    """Finding a Motif with Modifications"""
+    s1, s2 = Parser(file).seqs()
+    res = aln.sims(s1, s2)
+    print(*res, sep="\n")
 
 
 @app.command("eval")
@@ -598,6 +632,13 @@ def lexv(file: str):
 #     seqs = Parser(file).lines()
 #     for line in graph.trie(seqs):
 #         print(*line)
+
+
+@app.command("nwck")
+def nwck(file: str):
+    """Distances in Trees"""
+    # data = Parser(file).lines()
+    # res = [graph.nwck(data[i], data[i + 1].split()) for i in range(0, len(data), 3)]
 
 
 def main():

@@ -1,5 +1,6 @@
-from rosalind.helpers import blosum62
 from collections import defaultdict
+from itertools import product, combinations
+import numpy as np
 
 
 def printm(m, s1, s2):
@@ -227,9 +228,8 @@ def mgap(s1, s2):
     return len(s1) + len(s2) - 2 * m[len(s2), len(s1)]
 
 
-def glob(s1, s2, penalty=-5):
+def glob(s1, s2, score, penalty):
     """Global Alignment with Scoring Matrix"""
-    score = blosum62()
     m = {}
     for j in range(len(s2) + 1):
         m[j, 0] = penalty * j
@@ -246,14 +246,13 @@ def glob(s1, s2, penalty=-5):
     return m[len(s2), len(s1)]
 
 
-def gcon(s1, s2, penalty=-5):
+def gcon(s1, s2, score, penalty):
     """Global Alignment with Constant Gap Penalty"""
     # See Biological Sequence Analysis page 29
     # Its a simplification of the more general affine gap penalty
     # with an extension penalty of 0.
     # We now have to keep track of three matrices m, x and y
 
-    score = blosum62()
     m, x, y = {}, {}, {}
     for j in range(len(s2) + 1):
         m[j, 0] = penalty
@@ -278,12 +277,10 @@ def insert_indel(word, i):
     return word[:i] + "-" + word[i:]
 
 
-def gaff(v, w, sigma=-11, epsilon=-1):
+def gaff(v, w, score, sigma, epsilon):
     """Global Alignment with Affine Gap Penalty"""
     # See Biological Sequence Analysis page 29
     # We now have to keep track of three matrices m, x and y
-
-    score = blosum62()
 
     m = [[0 for j in range(len(w) + 1)] for i in range(len(v) + 1)]
     x = [[0 for j in range(len(w) + 1)] for i in range(len(v) + 1)]
@@ -345,10 +342,185 @@ def gaff(v, w, sigma=-11, epsilon=-1):
             j -= 1
             a1 = insert_indel(a1, i)
 
-    # Prepend the necessary preceeding indels to get to (0,0).
+    # Prepend the necessary preceding indels to get to (0,0).
     for _ in range(i):
         a2 = insert_indel(a2, 0)
     for _ in range(j):
         a1 = insert_indel(a1, 0)
 
     return {"dist": str(max_score), "a1": a1, "a2": a2}
+
+
+def loca(s1, s2, score, penalty):
+    m, p = {}, {}
+    for j in range(len(s2) + 1):
+        m[j, 0] = 0
+        p[j, 0] = "↑"
+    for i in range(len(s1) + 1):
+        m[0, i] = 0
+        p[0, i] = "←"
+
+    m[0, 0] = 0
+    for j in range(len(s2)):
+        for i in range(len(s1)):
+            new = (j + 1, i + 1)
+            opt = [
+                m[j, i] + score[s1[i]][s2[j]],
+                m[j, i + 1] + penalty,
+                m[j + 1, i] + penalty,
+                0,
+            ]
+            m[new] = max(opt)
+            p[new] = ["↖", "↑", "←", "↖"][opt.index(max(opt))]
+
+    max_score = max(x for x in m.values())
+    j, i = [k for k, v in m.items() if v == max_score][0]
+    a1, a2 = "", ""
+    while i > 0 or j > 0:
+        if m[j, i] == 0:
+            break
+        if p[j, i] == "↖":
+            a1 += s1[i - 1]
+            a2 += s2[j - 1]
+            j, i = j - 1, i - 1
+        elif p[j, i] == "←":
+            a1 += s1[i - 1]
+            i = i - 1
+        elif p[j, i] == "↑":
+            a2 += s2[j - 1]
+            j = j - 1
+
+    return {"dist": max_score, "a1": a1[::-1], "a2": a2[::-1]}
+
+
+def mult(seqs):
+    def valid_coord(x, pos):
+        return all([i >= 0 for i in prev(pos, x)])
+
+    def prev(pos, ptr):
+        return tuple([p + d for p, d in zip(pos, ptr)])
+
+    def insertions(seqs, pos, ptr):
+        return [seq[pos[i] - 1] if ptr[i] == -1 else "-" for i, seq in enumerate(seqs)]
+
+    # score is obtained as sum over all possible pairs
+    def score(seqs, pos, ptr):
+        a = insertions(seqs, pos, ptr)
+        return sum(0 if a == b else -1 for a, b in combinations(a, 2))
+
+    def moves(n):
+        return list(product([0, -1], repeat=n))[1:]
+
+    m, p = {}, {}
+    m[0, 0, 0, 0] = 0
+    ranges = [range(0, len(s) + 1) for s in seqs]
+    for pos in product(*ranges):
+        ptrs = list(filter(lambda x: valid_coord(x, pos), moves(4)))
+        if not len(ptrs):
+            continue
+        sc = [m[prev(pos, x)] + score(seqs, pos, x) for x in ptrs]
+        m[pos] = max(sc)
+        p[pos] = ptrs[sc.index(max(sc))]
+
+    # traceback to recover alignment
+    tot = m[pos]
+    aln = ["", "", "", ""]
+    while any([x > 0 for x in pos]):
+        ptr = p[pos]
+        for i, v in enumerate(insertions(seqs, pos, ptr)):
+            aln[i] += v
+        pos = prev(pos, ptr)
+
+    return tot, *[a[::-1] for a in aln]
+
+
+# Since the real data is quite big for this challenge, we'll use
+# numpy integer arrays for best performance.
+def oap(s1, s2, penalty=-2):
+    score = np.empty((len(s2) + 1, len(s1) + 1), dtype=int)
+    ptr = np.empty((len(s2) + 1, len(s1) + 1), dtype=int)
+
+    for j in range(len(s2) + 1):
+        score[j][0] = j * penalty
+        ptr[j][0] = 1
+    for i in range(len(s1) + 1):
+        score[0][i] = 0
+        ptr[0][i] = 2
+
+    score[0][0] = 0
+    for j in range(len(s2)):
+        for i in range(len(s1)):
+            opt = [
+                score[j][i] + (1 if s1[i] == s2[j] else penalty),
+                score[j][i + 1] + penalty,
+                score[j + 1][i] + penalty,
+            ]
+            best = max(opt)
+            score[j + 1][i + 1] = best
+            ptr[j + 1][i + 1] = opt.index(best)
+
+    sc = [score[j][len(s1)] for j in range(len(s2) + 1)]
+    max_score = max(sc)
+    j = [j for j, s in enumerate(sc) if s == max_score][-1]
+    i = len(s1)
+    a1, a2 = "", ""
+    while i > 0 and j > 0:
+        if ptr[j][i] == 0:
+            a1 += s1[i - 1]
+            a2 += s2[j - 1]
+            j, i = j - 1, i - 1
+        elif ptr[j][i] == 1:
+            a1 += "-"
+            a2 += s2[j - 1]
+            j = j - 1
+        elif ptr[j][i] == 2:
+            a1 += s1[i - 1]
+            a2 += "-"
+            i = i - 1
+
+    return max_score, a1[::-1], a2[::-1]
+
+
+def sims(s1, s2):
+    m, p = {}, {}
+    for j in range(len(s2) + 1):
+        m[j, 0] = -j
+        p[j, 0] = "↑"
+    for i in range(len(s1) + 1):
+        m[0, i] = 0
+        p[0, i] = "←"
+
+    m[0, 0] = 0
+    for j in range(len(s2)):
+        for i in range(len(s1)):
+            new = (j + 1, i + 1)
+            match = 1 if s1[i] == s2[j] else -1
+            opt = [
+                m[j, i] + match,
+                m[j, i + 1] - 1,
+                m[j + 1, i] - 1,
+            ]
+            m[new] = max(opt)
+            p[new] = ["↖", "↑", "←"][opt.index(max(opt))]
+
+    sc = [m[len(s2), i] for i in range(len(s1) + 1)]
+    max_score = max(sc)
+    i = sc.index(max_score)
+    j = len(s2)
+
+    a1, a2 = "", ""
+    while i > 0 and j > 0:
+        if p[j, i] == "↖":
+            a1 += s1[i - 1]
+            a2 += s2[j - 1]
+            j, i = j - 1, i - 1
+        elif p[j, i] == "←":
+            a1 += s1[i - 1]
+            a2 += "-"
+            i = i - 1
+        elif p[j, i] == "↑":
+            a1 += "-"
+            a2 += s2[j - 1]
+            j = j - 1
+
+    return max_score, a1[::-1], a2[::-1]

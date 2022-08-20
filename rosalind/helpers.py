@@ -181,3 +181,10 @@ def blosum62():
     lines = pr.resource_string(__name__, "data/blosum62.txt").decode().split("\n")
     header = lines[0].split()
     return dict([x[0], dict(zip(header, map(int, x.split()[1:])))] for x in lines[1:])
+
+
+@memoize
+def pam250():
+    lines = pr.resource_string(__name__, "data/pam250.txt").decode().split("\n")
+    header = lines[0].split()
+    return dict([x[0], dict(zip(header, map(int, x.split()[1:])))] for x in lines[1:])

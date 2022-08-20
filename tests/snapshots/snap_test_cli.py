@@ -205,6 +205,11 @@ snapshots['test_cli_function[lgis] 1'] = '''1 2 3
 snapshots['test_cli_function[lia] 1'] = '''0.68359375
 '''
 
+snapshots['test_cli_function[loca] 1'] = '''23
+MEANLYPRTEINSTRIN
+LEASANTLYEINSTEIN
+'''
+
 snapshots['test_cli_function[long] 1'] = '''ATTAGACCTGCCGGAATAC
 '''
 
@@ -226,6 +231,25 @@ P20840_SAG1_YEAST
 '''
 
 snapshots['test_cli_function[mrna] 1'] = '''12
+'''
+
+snapshots['test_cli_function[mult] 1'] = '''-18
+ATAT-CCG
+-T---CCG
+ATGTACTG
+ATGT-CTG
+'''
+
+snapshots['test_cli_function[nwck] 1'] = '''0
+0
+'''
+
+snapshots['test_cli_function[oap] 1'] = '''initialising
+recursing
+backtracking
+1
+ATTAGA-CAG
+A-TAGACCAT
 '''
 
 snapshots['test_cli_function[orf] 1'] = '''M
@@ -325,6 +349,11 @@ snapshots['test_cli_function[sign] 1'] = '''8
 -2 1
 2 -1
 2 1
+'''
+
+snapshots['test_cli_function[sims] 1'] = '''5
+ACCATAAGCCCTACGTG-CCG
+GCCGTCAG-GCT-GGTGTCCG
 '''
 
 snapshots['test_cli_function[spec] 1'] = '''WMQS
