@@ -115,13 +115,12 @@ def breaks(s, t):
 def min_breaks(seqs, t):
     rev = []
     for s in seqs:
-        for i, j in combinations(breaks(s, t), 2):
-            rev.append(flip(s, i, j))
-
+        for i, j in combinations(breaks(s["s"], t), 2):
+            rev.append({"s": flip(s["s"], i, j), "p": s["p"] + [[i, j - 1]]})
     min_b = len(t)
     mr = []
     for r in rev:
-        n = len(breaks(r, t))
+        n = len(breaks(r["s"], t))
         if n < min_b:
             min_b = n
             mr = [r]
@@ -131,15 +130,18 @@ def min_breaks(seqs, t):
 
 
 # based on https://medium.com/@matthewwestmk/87c62d690eef
-def get_distance(s, t):
+def sort(s, t):
+    """Sorting by Reversals"""
     s = ["-"] + s + ["+"]
     t = ["-"] + t + ["+"]
     nr = 0
-    c = [s]
-    while t not in c:
+    c = [{"s": s, "p": []}]
+    seqs = [s]
+    while t not in seqs:
         c = min_breaks(c, t)
         nr += 1
-    return nr
+        seqs = [x["s"] for x in c]
+    return nr, c
 
 
 @memoize

@@ -1,36 +1,5 @@
-import re
-
 from collections import defaultdict
-from itertools import permutations
-
-
-class Graph:
-    """Store a graph in a dictionary where key is node and value is a list of
-    connections"""
-
-    def __init__(self, adjacency_list):
-        self.graph = defaultdict(list)
-        for x in adjacency_list:
-            self.graph[x[0]].append(x[1])
-            self.graph[x[1]].append(x[0])
-        self.nodes = list(self.graph.keys())
-
-    def count_distinct(self):
-        visited = {}
-        n_graphs = 0
-
-        def visit_nodes(node):
-            visited[node] = True
-            for i in self.graph[node]:
-                if i not in visited:
-                    visit_nodes(i)
-
-        for node in list(self.nodes):
-            if node not in visited:
-                visit_nodes(node)
-                n_graphs += 1
-
-        return n_graphs
+from itertools import permutations, groupby
 
 
 def overlap_graph(seqs, n=3):
@@ -41,140 +10,52 @@ def overlap_graph(seqs, n=3):
             yield (pair[0].id, pair[1].id)
 
 
-class Node:
-    """Store a node in a graph, retaining parent and child relationships"""
-
-    def __init__(self, id, name, parent, children=[]):
-        self.id = id
-        self.name = name
-        self.parent = parent
-        self.children = children
-
-    # Method to get the depth of the node (for printing)
-    def depth(self):
-        current_node = self
-        depth = 0
-        while type(current_node.parent):
-            current_node = current_node.parent
-            depth += 1
-        return depth
-
-    def __repr__(self):
-        if len(self.children) > 0:
-            children = ",".join(x.__repr__() for x in self.children)
-            return "({}){}".format(children, self.name)
-        else:
-            return self.name
+def trie(seqs):
+    graph = {}
+    if len(seqs):
+        for base, nseqs in groupby(seqs, key=lambda s: s[0]):
+            graph[base] = trie([seq[1:] for seq in nseqs if len(seq) > 1])
+    return graph
 
 
-def parse(newick):
-    # find a name or a delimiter.
-    # a name is any A-z_ characters followed by [,;)]
-    tokens = re.finditer(r"([A-z_]*)([,;)])|(\S)", newick)
-
-    def recurse(nextid, pid):
-        id = nextid
-        children = []
-
-        name, delim, ch = next(tokens).groups()
-        while ch == "(":
-            while ch in "(,":
-                node, ch, nextid = recurse(nextid + 1, id)
-                children.append(node)
-            name, delim, ch = next(tokens).groups()
-        return Node(id, name, pid, children), delim, nextid
-
-    return recurse(0, -1)[0]
+def print_trie(graph, node=1):
+    i = node
+    for edge in sorted(graph):
+        print(node, i + 1, edge)
+        i = print_trie(graph[edge], i + 1)
+    return i
 
 
-newick = "(long_name,Basd,(C,D)E,G),(H,I);"
-parse(newick)
-
-# def parse(newick):
-#     def recurse(nextid, pid, i):
-#         id = nextid;
-#         children = []
-#         ch = newick[i]
-#         m = re.match(r"^[A-z_]+", newick[i+1:])
-#         if m:
-#             name = m.string
-#         if ch == "(":
-#             while ch in "(,":
-#                 node, ch, nextid = recurse(nextid+1, id)
-#                 children.append(node)
-#             name, delim, ch = next(tokens).groups()
-#         else:
-
-#         return Node(id, name, pid, children), delim, nextid
-
-#     return recurse(0, -1)[0]
+def build_seq(node, rev, edges):
+    seq = ""
+    while node in rev:
+        # print(edges[node], end = " ")
+        seq = edges[node] + seq
+        node = rev[node]
+    # print()
+    return seq
 
 
-# def nwck(tree, nodes):
-#     """Distances in Trees"""
-#     i = 0
-#     node = 0
-#     graph = {}
-#     while i < len(tree):
-#         if tree[i] == "(":
-#             print(i)
-#         i += 1
+# traverse graph and find longest seq up to a node with a least k leaves?
+def lrep(seq, k, graph):
+    # parse data and build structures
+    edges = defaultdict(list)
+    rev = {}
+    heads, tails = set(), set()
+    for edge in graph:
+        n1, n2, i, n = edge.split()
+        tails.add(n2)
+        heads.add(n1)
+        rev[n2] = n1
+        edges[n2] = seq[(int(i) - 1) : (int(i) + int(n) - 1)]
 
+    # count the number of descendents (leaves) from each node
+    descendents = defaultdict(int)
+    for leaf in tails - heads:
+        while leaf in rev:
+            leaf = rev[leaf]
+            descendents[leaf] += 1
 
-# class Node:
-#     def __init__(self, name):
-#         self.name = name
-#         self.children = []
-#         self.parent = None
-
-#     # Method to get the depth of the node (for printing)
-#     def get_depth(self):
-#         current_node = self
-#         depth = 0
-#         while current_node.parent:
-#             current_node = current_node.parent
-#             depth += 1
-#         return depth
-
-#     # String representation
-#     def __str__(self):
-#         return self.name
-
-# newick = "(A,Bcad,(C,D)E,G)F"
-
-# root = None
-# na = ""
-# stack = []
-# for i in list(reversed(newick)):
-#     if i == ')':
-#         if na != "":
-#             node = Node(na)
-#             na = ""
-#             if len(stack):
-#                 stack[-1].children.append(node)
-#                 node.parent = stack[-1]
-#             else:
-#                 root = node
-#             stack.append(node)
-#     elif i == '(':
-#         if (na != ""):
-#             node = Node(na)
-#             na = ""
-#             stack[-1].children.append(node)
-#             node.parent = stack[-1]
-#         stack.pop()
-#     elif i == ',':
-#         if (na != ""):
-#             node = Node(na)
-#             na = ""
-#             stack[-1].children.append(node)
-#             node.parent = stack[-1]
-#     else:
-#         na += i
-
-# # Just to print the parsed tree.
-# print_stack = [root]
-# while len(print_stack):
-#     node = print_stack.pop()
-#     print("-" * node.get_depth(), node)
-#     print_stack.extend(node.children)
+    candidates = [x for x in descendents if descendents[x] >= k]
+    seqs = [build_seq(cand, rev, edges) for cand in candidates]
+    return max(seqs, key=len)

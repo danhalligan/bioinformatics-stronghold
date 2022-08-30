@@ -223,7 +223,7 @@ python-versions = ">=3.5"
 name = "importlib-metadata"
 version = "4.10.1"
 description = "Read metadata from Python packages"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -266,6 +266,14 @@ docs = ["sphinx", "jaraco.packaging (>=8.2)", "rst.linker (>=1.9)", "jaraco.tide
 testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-cov", "pytest-enabler (>=1.0.1)", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [[package]]
+name = "llvmlite"
+version = "0.39.0"
+description = "lightweight wrapper around basic LLVM functionality"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "mccabe"
 version = "0.6.1"
 description = "McCabe checker, plugin for flake8"
@@ -296,6 +304,19 @@ description = "Node.js virtual environment builder"
 category = "dev"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "numba"
+version = "0.56.0"
+description = "compiling Python code using LLVM"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+importlib-metadata = {version = "*", markers = "python_version < \"3.9\""}
+llvmlite = ">=0.39.0dev0,<0.40"
+numpy = ">=1.18,<1.23"
 
 [[package]]
 name = "numpy"
@@ -731,7 +752,7 @@ python-versions = "*"
 name = "zipp"
 version = "3.7.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -742,7 +763,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "d579eaa67b48521b26ea6389626371e65814129b642915ba491dcd715fb89d7a"
+content-hash = "f83126dc0eeea5270094fb08d7c32c76d1dca830c8e2b21ac30fbcbbbdabb956"
 
 [metadata.files]
 appdirs = [
@@ -947,6 +968,7 @@ keyring = [
     {file = "keyring-23.5.0-py3-none-any.whl", hash = "sha256:b0d28928ac3ec8e42ef4cc227822647a19f1d544f21f96457965dc01cf555261"},
     {file = "keyring-23.5.0.tar.gz", hash = "sha256:9012508e141a80bd1c0b6778d5c610dd9f8c464d75ac6774248500503f972fb9"},
 ]
+llvmlite = []
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
@@ -963,6 +985,7 @@ nodeenv = [
     {file = "nodeenv-1.6.0-py2.py3-none-any.whl", hash = "sha256:621e6b7076565ddcacd2db0294c0381e01fd28945ab36bcf00f41c5daf63bef7"},
     {file = "nodeenv-1.6.0.tar.gz", hash = "sha256:3ef13ff90291ba2a4a7a4ff9a979b63ffdd00a464dbe04acf0ea6471517a4c2b"},
 ]
+numba = []
 numpy = [
     {file = "numpy-1.22.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3d62d6b0870b53799204515145935608cdeb4cebb95a26800b6750e48884cc5b"},
     {file = "numpy-1.22.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:831f2df87bd3afdfc77829bc94bd997a7c212663889d56518359c827d7113b1f"},

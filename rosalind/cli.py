@@ -342,7 +342,19 @@ def rear(file: str):
     """Reversal Distance"""
     data = open(file).read().strip().split("\n\n")
     data = [tuple([list(map(int, y.split())) for y in x.split("\n")]) for x in data]
-    print(*[com.get_distance(s, t) for s, t in data])
+    print(*[com.sort(s, t)[0] for s, t in data])
+
+
+@app.command("sort")
+def sort(file: str):
+    """Sorting by Reversals"""
+    s, t = open(file).read().splitlines()
+    s = list(map(int, s.split()))
+    t = list(map(int, t.split()))
+    nr, c = com.sort(s, t)
+    print(nr)
+    for r in c[0]["p"]:
+        print(*r)
 
 
 @app.command("rstr")
@@ -557,6 +569,14 @@ def sims(file: str):
     print(*res, sep="\n")
 
 
+# @app.command("ksim")
+# def ksim(file: str):
+#     """Finding All Similar Motifs"""
+#     d, s1, s2 = Parser(file).lines()
+#     for res in aln.ksim(s1, s2, int(d)):
+#         print(*res)
+
+
 @app.command("eval")
 def eval(file: str):
     """Expected Number of Restriction Sites"""
@@ -626,19 +646,25 @@ def lexv(file: str):
     print(*ros.lexv(l1.split(), int(l2)), sep="\n")
 
 
-# @app.command("trie")
-# def trie(file: str):
-#     """Introduction to Pattern Matching"""
-#     seqs = Parser(file).lines()
-#     for line in graph.trie(seqs):
-#         print(*line)
+@app.command("trie")
+def trie(file: str):
+    """Introduction to Pattern Matching"""
+    seqs = Parser(file).lines()
+    graph.print_trie(graph.trie(seqs))
 
 
-@app.command("nwck")
-def nwck(file: str):
-    """Distances in Trees"""
-    # data = Parser(file).lines()
-    # res = [graph.nwck(data[i], data[i + 1].split()) for i in range(0, len(data), 3)]
+@app.command("lrep")
+def lrep(file: str):
+    """Introduction to Pattern Matching"""
+    seq, k, *g = Parser(file).lines()
+    print(graph.lrep(seq, int(k), g))
+
+
+# @app.command("nwck")
+# def nwck(file: str):
+#     """Distances in Trees"""
+#     # data = Parser(file).lines()
+#     # res = [graph.nwck(data[i], data[i + 1].split()) for i in range(0, len(data), 3)]
 
 
 def main():

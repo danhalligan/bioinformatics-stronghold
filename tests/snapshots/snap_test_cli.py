@@ -213,6 +213,9 @@ LEASANTLYEINSTEIN
 snapshots['test_cli_function[long] 1'] = '''ATTAGACCTGCCGGAATAC
 '''
 
+snapshots['test_cli_function[lrep] 1'] = '''CATAC
+'''
+
 snapshots['test_cli_function[mgap] 1'] = '''3
 '''
 
@@ -244,10 +247,7 @@ snapshots['test_cli_function[nwck] 1'] = '''0
 0
 '''
 
-snapshots['test_cli_function[oap] 1'] = '''initialising
-recursing
-backtracking
-1
+snapshots['test_cli_function[oap] 1'] = '''1
 ATTAGA-CAG
 A-TAGACCAT
 '''
@@ -356,6 +356,11 @@ ACCATAAGCCCTACGTG-CCG
 GCCGTCAG-GCT-GGTGTCCG
 '''
 
+snapshots['test_cli_function[sort] 1'] = '''2
+4 9
+2 5
+'''
+
 snapshots['test_cli_function[spec] 1'] = '''WMQS
 '''
 
@@ -375,6 +380,17 @@ snapshots['test_cli_function[tran] 1'] = '''1.2142857142857142
 '''
 
 snapshots['test_cli_function[tree] 1'] = '''3
+'''
+
+snapshots['test_cli_function[trie] 1'] = '''1 2 A
+2 3 T
+3 4 A
+4 5 G
+5 6 A
+3 7 C
+1 8 G
+8 9 A
+9 10 T
 '''
 
 snapshots['test_cli_function[wfmd] 1'] = '''0.7717915965477005
