@@ -3,8 +3,6 @@ from itertools import permutations, groupby
 
 
 def overlap_graph(seqs, n=3):
-    """Build an overlap graph of sequences where prefix of A matches suffix of
-    B"""
     for pair in permutations(seqs, 2):
         if pair[0].seq.endswith(pair[1].seq[:n]):
             yield (pair[0].id, pair[1].id)
@@ -13,7 +11,7 @@ def overlap_graph(seqs, n=3):
 def trie(seqs):
     graph = {}
     if len(seqs):
-        for base, nseqs in groupby(seqs, key=lambda s: s[0]):
+        for base, nseqs in groupby(sorted(seqs), key=lambda s: s[0]):
             graph[base] = trie([seq[1:] for seq in nseqs if len(seq) > 1])
     return graph
 
@@ -29,10 +27,8 @@ def print_trie(graph, node=1):
 def build_seq(node, rev, edges):
     seq = ""
     while node in rev:
-        # print(edges[node], end = " ")
         seq = edges[node] + seq
         node = rev[node]
-    # print()
     return seq
 
 
@@ -59,3 +55,19 @@ def lrep(seq, k, graph):
     candidates = [x for x in descendents if descendents[x] >= k]
     seqs = [build_seq(cand, rev, edges) for cand in candidates]
     return max(seqs, key=len)
+
+
+def print_suff(graph, edge=""):
+    ks = list(graph.keys())
+    while len(ks) == 1:
+        edge += ks[0]
+        graph = graph[ks[0]]
+        ks = list(graph.keys())
+    print(edge)
+    if len(ks) > 0:
+        for k in ks:
+            print_suff(graph[k], k)
+
+
+def suff(seq):
+    return trie([seq[i:] for i in range(len(seq))])

@@ -243,10 +243,6 @@ ATGTACTG
 ATGT-CTG
 '''
 
-snapshots['test_cli_function[nwck] 1'] = '''0
-0
-'''
-
 snapshots['test_cli_function[oap] 1'] = '''1
 ATTAGA-CAG
 A-TAGACCAT
@@ -374,6 +370,21 @@ snapshots['test_cli_function[sset] 1'] = '''8
 '''
 
 snapshots['test_cli_function[subs] 1'] = '''2 4 10
+'''
+
+snapshots['test_cli_function[suff] 1'] = '''
+$
+A
+A
+ATG$
+TG$
+T
+AAATG$
+G$
+G$
+T
+AAATG$
+G$
 '''
 
 snapshots['test_cli_function[tran] 1'] = '''1.2142857142857142

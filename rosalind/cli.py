@@ -660,6 +660,13 @@ def lrep(file: str):
     print(graph.lrep(seq, int(k), g))
 
 
+@app.command("suff")
+def suff(file: str):
+    """Encoding Suffix Trees"""
+    seq = Parser(file).line()
+    graph.print_suff(graph.suff(seq))
+
+
 # @app.command("nwck")
 # def nwck(file: str):
 #     """Distances in Trees"""
