@@ -1,8 +1,6 @@
 from collections import defaultdict
 from itertools import permutations, groupby
-from rosalind.helpers import recursionlimit
 from os.path import commonprefix
-from math import log
 from functools import cache
 
 
@@ -62,17 +60,22 @@ def lrep(seq, k, graph):
     return max(seqs, key=len)
 
 
-def collapse_trie(graph):
-    """Collapses single descendent nodes in a trie to yield a suffix tree"""
-    new = {}
-    for k in graph.keys():
-        edge = k
-        g = graph[k]
-        while len(g) == 1:
-            k, g = list(g.items())[0]
-            edge += k
-        new[edge] = collapse_trie(g)
-    return new
+@cache
+def suffix_tree(seq, starts):
+    graph = {}
+    bases = set([seq[start] for start in starts])
+    for base in bases:
+        matching = [start for start in starts if seq[start] == base]
+        seqs = [seq[s:] for s in matching]
+        prefix = commonprefix(seqs)
+        size = len(prefix)
+        new_starts = [start + size for start in matching if start + size < len(seq)]
+        graph[prefix] = suffix_tree(seq, tuple(new_starts))
+    return graph
+
+
+def suff(seq):
+    return suffix_tree(seq, tuple(range(len(seq))))
 
 
 def get_edges(graph):
@@ -81,42 +84,7 @@ def get_edges(graph):
         yield from get_edges(graph[k])
 
 
-def suff(seq):
-    seqs = [seq[i:] for i in range(len(seq))]
-    return collapse_trie(trie(seqs))
-
-
-# This is naive solution, but takes too long to run
-def ling_old(seq):
-    tree = suff(seq)
-    s = sum([len(edge) for edge in get_edges(tree)])
+def ling(seq):
+    s = sum(len(edge) for edge in get_edges(suff(seq)))
     m = sum(min(4 ** k, len(seq) - k + 1) for k in range(1, len(seq) + 1))
     return s / m
-
-
-# This is an "optimised" solution to ling that doesn't compute a suffix tree
-# Instead it sums the lengths of the edges as it goes.
-# Memoisation leads to a large speed up and takes ~25 secs to run.
-@cache
-def compute_sub(seq, starts):
-    if len(starts) == 1:
-        return len(seq) - starts[0]
-    else:
-        tot = 0
-        bases = set([seq[start] for start in starts])
-        for base in bases:
-            matching = [start for start in starts if seq[start] == base]
-            seqs = [seq[s:] for s in matching]
-            prefix = commonprefix(seqs)
-            size = len(prefix)
-            nstarts = [start + size for start in matching if start + size < len(seq)]
-            tot += compute_sub(seq, tuple(nstarts)) + size
-        return tot
-
-
-def ling(seq):
-    n = len(seq)
-    m = sum([n - k + 1 if k > log(n + 1) / log(4) else 4 ** k for k in range(1, n + 1)])
-    with recursionlimit(10000):
-        sub = compute_sub(seq, tuple(range(len(seq))))
-    return sub / m
