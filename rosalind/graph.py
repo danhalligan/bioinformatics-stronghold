@@ -1,5 +1,9 @@
 from collections import defaultdict
 from itertools import permutations, groupby
+from rosalind.helpers import recursionlimit
+from os.path import commonprefix
+from math import log
+from functools import cache
 
 
 def overlap_graph(seqs, n=3):
@@ -16,12 +20,13 @@ def trie(seqs):
     return graph
 
 
-def print_trie(graph, node=1):
-    i = node
+def as_adjacency(graph, nodes=[]):
+    node = len(nodes) + 1
     for edge in sorted(graph):
-        print(node, i + 1, edge)
-        i = print_trie(graph[edge], i + 1)
-    return i
+        i = len(nodes) + 1
+        nodes.append((node, i + 1, edge))
+        nodes + as_adjacency(graph[edge], nodes)
+    return nodes
 
 
 def build_seq(node, rev, edges):
@@ -57,17 +62,61 @@ def lrep(seq, k, graph):
     return max(seqs, key=len)
 
 
-def print_suff(graph, edge=""):
-    ks = list(graph.keys())
-    while len(ks) == 1:
-        edge += ks[0]
-        graph = graph[ks[0]]
-        ks = list(graph.keys())
-    print(edge)
-    if len(ks) > 0:
-        for k in ks:
-            print_suff(graph[k], k)
+def collapse_trie(graph):
+    """Collapses single descendent nodes in a trie to yield a suffix tree"""
+    new = {}
+    for k in graph.keys():
+        edge = k
+        g = graph[k]
+        while len(g) == 1:
+            k, g = list(g.items())[0]
+            edge += k
+        new[edge] = collapse_trie(g)
+    return new
+
+
+def get_edges(graph):
+    for k in graph.keys():
+        yield k
+        yield from get_edges(graph[k])
 
 
 def suff(seq):
-    return trie([seq[i:] for i in range(len(seq))])
+    seqs = [seq[i:] for i in range(len(seq))]
+    return collapse_trie(trie(seqs))
+
+
+# This is naive solution, but takes too long to run
+def ling_old(seq):
+    tree = suff(seq)
+    s = sum([len(edge) for edge in get_edges(tree)])
+    m = sum(min(4 ** k, len(seq) - k + 1) for k in range(1, len(seq) + 1))
+    return s / m
+
+
+# This is an "optimised" solution to ling that doesn't compute a suffix tree
+# Instead it sums the lengths of the edges as it goes.
+# Memoisation leads to a large speed up and takes ~25 secs to run.
+@cache
+def compute_sub(seq, starts):
+    if len(starts) == 1:
+        return len(seq) - starts[0]
+    else:
+        tot = 0
+        bases = set([seq[start] for start in starts])
+        for base in bases:
+            matching = [start for start in starts if seq[start] == base]
+            seqs = [seq[s:] for s in matching]
+            prefix = commonprefix(seqs)
+            size = len(prefix)
+            nstarts = [start + size for start in matching if start + size < len(seq)]
+            tot += compute_sub(seq, tuple(nstarts)) + size
+        return tot
+
+
+def ling(seq):
+    n = len(seq)
+    m = sum([n - k + 1 if k > log(n + 1) / log(4) else 4 ** k for k in range(1, n + 1)])
+    with recursionlimit(10000):
+        sub = compute_sub(seq, tuple(range(len(seq))))
+    return sub / m

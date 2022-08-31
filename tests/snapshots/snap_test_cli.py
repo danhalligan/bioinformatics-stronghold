@@ -205,6 +205,9 @@ snapshots['test_cli_function[lgis] 1'] = '''1 2 3
 snapshots['test_cli_function[lia] 1'] = '''0.68359375
 '''
 
+snapshots['test_cli_function[ling] 1'] = '''0.875
+'''
+
 snapshots['test_cli_function[loca] 1'] = '''23
 MEANLYPRTEINSTRIN
 LEASANTLYEINSTEIN
@@ -372,8 +375,7 @@ snapshots['test_cli_function[sset] 1'] = '''8
 snapshots['test_cli_function[subs] 1'] = '''2 4 10
 '''
 
-snapshots['test_cli_function[suff] 1'] = '''
-$
+snapshots['test_cli_function[suff] 1'] = '''$
 A
 A
 ATG$

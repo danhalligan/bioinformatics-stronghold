@@ -650,12 +650,13 @@ def lexv(file: str):
 def trie(file: str):
     """Introduction to Pattern Matching"""
     seqs = Parser(file).lines()
-    graph.print_trie(graph.trie(seqs))
+    for edge in graph.as_adjacency(graph.trie(seqs)):
+        print(*edge)
 
 
 @app.command("lrep")
 def lrep(file: str):
-    """Introduction to Pattern Matching"""
+    """Finding the Longest Multiple Repeat"""
     seq, k, *g = Parser(file).lines()
     print(graph.lrep(seq, int(k), g))
 
@@ -664,7 +665,15 @@ def lrep(file: str):
 def suff(file: str):
     """Encoding Suffix Trees"""
     seq = Parser(file).line()
-    graph.print_suff(graph.suff(seq))
+    tree = graph.suff(seq)
+    print(*list(graph.get_edges(tree)), sep="\n")
+
+
+@app.command("ling")
+def ling(file: str):
+    """Linguistic Complexity of a Genome"""
+    seq = Parser(file).line()
+    print(graph.ling(seq))
 
 
 # @app.command("nwck")

@@ -2,6 +2,7 @@ import re
 import pkg_resources as pr
 import yaml
 import string
+import sys
 
 
 class Parser:
@@ -188,3 +189,15 @@ def pam250():
     lines = pr.resource_string(__name__, "data/pam250.txt").decode().split("\n")
     header = lines[0].split()
     return dict([x[0], dict(zip(header, map(int, x.split()[1:])))] for x in lines[1:])
+
+
+class recursionlimit:
+    def __init__(self, limit):
+        self.limit = limit
+
+    def __enter__(self):
+        self.old_limit = sys.getrecursionlimit()
+        sys.setrecursionlimit(self.limit)
+
+    def __exit__(self, type, value, tb):
+        sys.setrecursionlimit(self.old_limit)
