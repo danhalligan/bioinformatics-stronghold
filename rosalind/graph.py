@@ -63,7 +63,7 @@ def lrep(seq, k, graph):
 @cache
 def suffix_tree(seq, starts):
     graph = {}
-    bases = set([seq[start] for start in starts])
+    bases = sorted(set([seq[start] for start in starts]))
     for base in bases:
         matching = [start for start in starts if seq[start] == base]
         seqs = [seq[s:] for s in matching]
